@@ -147,7 +147,7 @@ const handleProductClick = (item) => {
         className="
           w-full
           sm:w-[400px]
-          max-h-[70vh]
+          max-h-[87vh]
           p-3
           sm:p-5
           md:p-5

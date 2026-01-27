@@ -200,7 +200,8 @@ export default function Sidebar({ children }) {
                 BOOKMARKS
               </Link>
             </nav>
-            <div className="flex-1 overflow-y-auto text-sm mt-4 ">
+           <div className="relative flex-1 overflow-y-auto text-sm">
+
               {selectedProduct ? (
                 <ProductDetailsSidebar
                   product={selectedProduct}
@@ -213,6 +214,8 @@ export default function Sidebar({ children }) {
                   {isBookmarks && <Bookmarks />}
                 </>
               )}
+              
+              
             </div>
           </div>
           <div
