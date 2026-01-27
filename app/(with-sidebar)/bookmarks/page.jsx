@@ -1,0 +1,133 @@
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
+import { IoMdBookmark } from "react-icons/io";
+import { IoBookmarkOutline } from "react-icons/io5";
+import RelatedImg from "@/public/RelatedImages/related1.svg";
+import Image from "next/image";
+import story2 from "@/public/storiesImages/story2.png";
+import { FaBookmark } from "react-icons/fa6";
+
+const Page = () => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const bookmark = [
+    {
+      id: 1,
+      image: story2,
+      title: "The North Face Nuptse Traction Chukka",
+      subtitle: <FaBookmark />,
+    },
+    {
+      id: 2,
+      image: story2,
+      title: "The North Face Nuptse Trcation Chukka",
+      subtitle: <FaBookmark />,
+    },
+    {
+      id: 3,
+      image: story2,
+      title: "The North Face Nuptse Traction Chukka",
+      subtitle: <FaBookmark />,
+    },
+    {
+      id: 4,
+      image: story2,
+      title: "The North Face Nuptse Traction Chukka",
+      subtitle: <FaBookmark />,
+    },
+    {
+      id: 5,
+      image: story2,
+      title: "The North Face Nuptse Traction Chukka",
+      subtitle: <FaBookmark />,
+    },
+    {
+      id: 6,
+      image: story2,
+      title: "The North Face Nuptse Traction Chukka",
+      subtitle: <FaBookmark />,
+    },
+  ];
+
+  return (
+    <>
+      <div className="hidden md:block">
+        <div className="px-4 sm:px-6 md:px-0">
+          <div className="w-full max-w-[400px] pe-5 mx-auto md:mx-0 md:w-[400px]">
+            <button
+              onClick={() => setIsBookmarked(!isBookmarked)}
+              className="text-2xl"
+              aria-label="Bookmark"
+            >
+              {isBookmarked ? <IoMdBookmark /> : <IoBookmarkOutline />}
+            </button>
+
+            <h1 className="pt-3 pb-3 text-center md:text-left">09.04.22</h1>
+
+            <h1 className="font-semibold text-lg sm:text-xl text-center md:text-left">
+              The North Face Nuptse Traction Chukka
+            </h1>
+
+            <p className="text-sm pt-5 md:me-10 text-justify">
+              Borrowing its nomenclature from The North Face's stalwart
+              outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka is
+              a winterised footwear silhouette combining comfort and protection.
+              Insulated using 700-fill-power goose down, the upper is made from
+              durable ripstop nylon with a PFC-free DWR coating, resisting
+              moisture and stains. Instead of traditional laces, it uses a
+              toggle closure to block snow and ice. The outsole features Winter
+              Grip® rubber with IcePick® temperature-sensitive lugs for traction
+              on icy surfaces.
+            </p>
+          </div>
+
+          <div className="pt-[5px] mt-6">
+            <p className="text-center md:text-left">SIMILAR PRODUCTS</p>
+            <div className="flex flex-wrap justify-center md:justify-start gap-7">
+              <Image
+                src={RelatedImg}
+                alt="related shoes images"
+                width={150}
+                height={150}
+                className="object-contain w-[120px] sm:w-[140px] md:w-[150px] h-auto"
+              />
+              <Image
+                src={RelatedImg}
+                alt="related shoes images"
+                width={150}
+                height={150}
+                className="object-contain w-[120px] sm:w-[140px] md:w-[150px] h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="block md:hidden mt-6 ">
+        {bookmark.map((item) => (
+          <Link key={item.id} href={`/products/${item.id}`} className="block">
+            <div className="flex  items-center text-center mb-5">
+              <Image
+                src={item.image}
+                alt={item.title}
+                width={100}
+                height={100}
+                className="object-contain"
+              />
+              <h2 className="font-semibold text-base mt-2">{item.title}</h2>
+              <p className="text-2xl  mt-1">{item.subtitle}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <div className="block md:hidden w-full bg-white flex justify-around items-center gap-3 fixed bottom-0 left-0 z-20 p-3 shadow-sm">
+        <label className="text-sm font-medium">Find</label>
+        <button>-</button>
+        <button>+</button>
+        <label className="text-sm font-medium">Filter</label>
+      </div>
+    </>
+  );
+};
+
+export default Page;
