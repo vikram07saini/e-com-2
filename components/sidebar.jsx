@@ -93,7 +93,6 @@ export default function Sidebar({ children }) {
     };
   }, [isMobileMenuOpen]);
 
-
   useEffect(() => {
     if (pathname === "/") {
       setSelectedProduct(null);
@@ -115,15 +114,14 @@ export default function Sidebar({ children }) {
       ? "text-red-500 font-semibold"
       : "text-black hover:text-red-500";
 
-const showBackButton =
-  selectedProduct !== null || isStoryDetail !==null || mobileFull === true;
-
+  const showBackButton =
+    selectedProduct !== null || isStoryDetail !== null || mobileFull === true;
 
   return (
     <>
-    <div className="hidden lg:block p-2 lg:rounded-2xl lg:w-[700px]">
-  <aside
-    className="
+      <div className="hidden lg:block p-2 lg:rounded-2xl lg:w-[700px]">
+        <aside
+          className="
       fixed lg:relative
       top-0 left-0
       bg-white
@@ -131,108 +129,111 @@ const showBackButton =
       lg:rounded-3xl
       z-40
       w-full lg:w-[400px]
-      h-screen
+  h-screen
       grid
-      grid-rows-[85%_15%]
-
+      grid-rows-[88%_12%]
     "
-  >
-  
-    <div className="flex flex-col overflow-hidden">
-      <div className="hidden lg:flex p-5 justify-between items-center">
-        <Link
-          href="/"
-          onClick={(e) => {
-            if (window.innerWidth < 1024) return;
-
-            e.preventDefault();
-            setSelectedProduct(null);
-            window.dispatchEvent(new CustomEvent("closeProductDetails"));
-
-            setTimeout(() => {
-              window.location.href = "/";
-            }, 0);
-          }}
         >
-          <Image
-            src={logo}
-            alt="logo"
-            width={60}
-            height={60}
-            priority
-            className="cursor-pointer"
-          />
-        </Link>
+          <div className="flex flex-col overflow-hidden">
+            <div className="hidden lg:flex p-5 justify-between items-center">
+              <Link
+                href="/"
+                onClick={(e) => {
+                  if (window.innerWidth < 1024) return;
 
-        {showBackButton && (
-          <Link
-            className="mr-10"
-            href="/"
-            onClick={(e) => {
-              if (window.innerWidth < 1024) return;
+                  e.preventDefault();
+                  setSelectedProduct(null);
+                  window.dispatchEvent(new CustomEvent("closeProductDetails"));
 
-              e.preventDefault();
-              setSelectedProduct(null);
-              setMobileFull(false);
+                  setTimeout(() => {
+                    window.location.href = "/";
+                  }, 0);
+                }}
+              >
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={60}
+                  height={60}
+                  priority
+                  className="cursor-pointer"
+                />
+              </Link>
 
-              window.dispatchEvent(new CustomEvent("closeProductDetails"));
+              {showBackButton && (
+                <Link
+                  className="mr-10"
+                  href="/"
+                  onClick={(e) => {
+                    if (window.innerWidth < 1024) return;
 
-              setTimeout(() => {
-                window.location.href = "/";
-              }, 0);
-            }}
-          >
-            <div className="text-red-600">
-              <ArrowLeftIcon />
+                    e.preventDefault();
+                    setSelectedProduct(null);
+                    setMobileFull(false);
+
+                    window.dispatchEvent(
+                      new CustomEvent("closeProductDetails"),
+                    );
+
+                    setTimeout(() => {
+                      window.location.href = "/";
+                    }, 0);
+                  }}
+                >
+                  <div className="text-red-600">
+                    <ArrowLeftIcon />
+                  </div>
+                </Link>
+              )}
             </div>
-          </Link>
-        )}
+            <nav className="flex flex-col lg:flex-row gap-3 px-5 mt-2">
+              <Link href="/home" className={linkClass("/home")}>
+                INDEX
+              </Link>
+              <Link href="/Stories" className={linkClass("/Stories")}>
+                STORIES
+              </Link>
+              <Link href="/" className={linkClass("/")}>
+                SHOP
+              </Link>
+              <Link href="/bookmarks" className={linkClass("/bookmarks")}>
+                BOOKMARKS
+              </Link>
+            </nav>
+            <div className="flex-1 overflow-y-auto text-sm mt-4 ">
+              {selectedProduct ? (
+                <ProductDetailsSidebar
+                  product={selectedProduct}
+                  onClose={() => setSelectedProduct(null)}
+                />
+              ) : (
+                <>
+                  {isHome && <Index />}
+                  {(isStories || isStoryDetail) && <Stories />}
+                  {isBookmarks && <Bookmarks />}
+                </>
+              )}
+            </div>
+          </div>
+          <div
+            className="hidden lg:flex items-center gap-5 px-5
+                sticky bottom-0 bg-white p-3 z-50"
+          >
+            <label htmlFor="Find" className="text-sm font-medium">
+              FIND
+            </label>
+            <input
+              className="bg-gray-100 text-sm w-full p-2 rounded-lg"
+              placeholder="Search Brand, Style, Colour or Year"
+            />
+          </div>
+        </aside>
       </div>
-      <nav className="flex flex-col lg:flex-row gap-3 px-5 mt-2">
-        <Link href="/home" className={linkClass("/home")}>
-          INDEX
-        </Link>
-        <Link href="/Stories" className={linkClass("/Stories")}>
-          STORIES
-        </Link>
-        <Link href="/" className={linkClass("/")}>
-          SHOP
-        </Link>
-        <Link href="/bookmarks" className={linkClass("/bookmarks")}>
-          BOOKMARKS
-        </Link>
-      </nav>
-      <div className="flex-1 overflow-y-auto text-sm mt-4 px-5">
-        {selectedProduct ? (
-          <ProductDetailsSidebar
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-          />
-        ) : (
-          <>
-            {isHome && <Index />}
-            {(isStories || isStoryDetail) && <Stories />}
-            {isBookmarks && <Bookmarks />}
-          </>
-        )}
-      </div>
-    </div>
-    <div className="hidden lg:flex items-center gap-5 px-10 ">
-      <label htmlFor="Find" className="text-sm font-medium">
-        FIND
-      </label>
-      <input
-        className="bg-gray-100 text-sm w-full p-2 rounded-lg"
-        placeholder="Search Brand, Style, Colour or Year"
-      />
-    </div>
-  </aside>
-</div>
 
-<div className="lg:hidden fixed top-0 left-0 right-0 h-[80px] bg-gray-100 z-40 pb-5"></div>
-<header className="lg:hidden fixed top-0 left-0 right-0 bg-white z-50 m-2 rounded-2xl ">
-  <div
-    className="
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-[80px] bg-gray-100 z-40 pb-5"></div>
+      <header className="lg:hidden fixed top-0 left-0 right-0 bg-white z-50 m-2 rounded-2xl ">
+        <div
+          className="
       flex
       items-center
       justify-between
@@ -241,35 +242,35 @@ const showBackButton =
       bg-white
       rounded-xl
     "
-  >
-    <Link
-      href="/"
-      onClick={(e) => {
-        if (window.innerWidth < 1024) return;
+        >
+          <Link
+            href="/"
+            onClick={(e) => {
+              if (window.innerWidth < 1024) return;
 
-        e.preventDefault();
-        setSelectedProduct(null);
-        window.dispatchEvent(new CustomEvent("closeProductDetails"));
+              e.preventDefault();
+              setSelectedProduct(null);
+              window.dispatchEvent(new CustomEvent("closeProductDetails"));
 
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 0);
-      }}
-      className="flex items-center"
-    >
-      <Image
-        src={logo}
-        alt="logo"
-        width={52}
-        height={52}
-        priority
-        className="cursor-pointer"
-      />
-    </Link>
+              setTimeout(() => {
+                window.location.href = "/";
+              }, 0);
+            }}
+            className="flex items-center"
+          >
+            <Image
+              src={logo}
+              alt="logo"
+              width={52}
+              height={52}
+              priority
+              className="cursor-pointer"
+            />
+          </Link>
 
-    <button
-      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      className="
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="
         flex
         items-center
         justify-center
@@ -280,13 +281,12 @@ const showBackButton =
         hover:bg-gray-100
         transition
       "
-      aria-label="Toggle menu"
-    >
-      {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
-    </button>
-  </div>
-</header>
-
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
+      </header>
 
       <aside
         className={`lg:hidden fixed top-0 left-0 w-screen h-screen bg-white z-40 transition-transform ${

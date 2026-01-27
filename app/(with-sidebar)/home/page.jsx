@@ -121,16 +121,25 @@ const items = [
 const Page = () => {
   const router = useRouter();
 
-  const handleProductClick = (item) => {
-    const currentParams = new URLSearchParams(window.location.search);
-    currentParams.set('selected', item.id);
-  
+const handleProductClick = (item) => {
+  const currentParams = new URLSearchParams(window.location.search);
+  currentParams.set("selected", item.id);
+
+  // ✅ If on mobile or not already on shop page, go to shop
+  if (window.innerWidth < 1024 || window.location.pathname !== "/") {
+    router.push(`/?${currentParams.toString()}`);
+  } else {
+    // ✅ Desktop: stay on same page, just update query
     router.push(`?${currentParams.toString()}`, undefined, { shallow: true });
-    
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('productSelected', { detail: item.id }));
-    }
-  };
+  }
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent("productSelected", { detail: item.id })
+    );
+  }
+};
+
 
   return (
     <div className="flex md:block justify-center md:justify-start px-2 sm:px-4 md:px-0 ">

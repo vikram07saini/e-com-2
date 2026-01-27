@@ -32,9 +32,23 @@ export default function Page() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
-  const [gridCols, setGridCols] = useState(6);
+ const [gridCols, setGridCols] = useState(2);
 
-  /* ---------- SORTED DATA ---------- */
+useEffect(() => {
+  const updateGridByScreen = () => {
+    if (window.innerWidth < 1024) {
+      setGridCols(2); // mobile
+    } else {
+      setGridCols(6); // desktop
+    }
+  };
+
+  updateGridByScreen();
+  window.addEventListener("resize", updateGridByScreen);
+
+  return () => window.removeEventListener("resize", updateGridByScreen);
+}, []);
+
   const sortedShopData = [...ShopData].sort((a, b) =>
     sortOrder === "asc" ? a.id - b.id : b.id - a.id
   );
