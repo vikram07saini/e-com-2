@@ -109,10 +109,17 @@ export default function Sidebar({ children }) {
   const isBookmarksMobile = effectivePath.startsWith("/bookmarks");
   const isShopMobile = effectivePath === "/";
 
-  const linkClass = (path) =>
-    pathname === path
-      ? "text-red-500 font-semibold"
-      : "text-black hover:text-red-500";
+const linkClass = (path) => {
+  const isActive =
+    effectivePath === path ||
+    (path === "/Stories" && isStoryDetail) ||
+    (path === "/bookmarks" && isBookmarks);
+
+  return `
+    transition-all duration-200
+    ${isActive ? "text-red-500 font-semibold pl-4" : "text-black hover:text-red-500"}
+  `;
+};
 
   const showBackButton =
     selectedProduct !== null || isStoryDetail !== null || mobileFull === true;
@@ -227,7 +234,7 @@ export default function Sidebar({ children }) {
               FIND
             </label>
             <input
-              className="bg-gray-100 text-sm w-[90%] p-2 rounded-lg"
+              className="bg-gray-100 text-xs w-[90%] p-2 rounded-lg"
               placeholder="Search Brand, Style, Colour or Year"
             />
           </div>
