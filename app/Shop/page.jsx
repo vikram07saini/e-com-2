@@ -458,20 +458,20 @@ useEffect(() => {
             <div className="mt-8 pl-8 lg:hidden bg-gray-100">
               <h1>SIMILAR PRODUCTS</h1>
             </div>
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-50">
+            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-50 ">
               <Image
                 src={selectedShoe.img}
                 alt="shoe360"
                 width={150}
                 height={150}
-                className="object-contain cursor-pointer"
+                className="object-contain cursor-pointer bg-gray-200"
               />
               <Image
                 src={img21}
                 alt="shoe360"
                 width={150}
                 height={150}
-                className="object-contain cursor-pointer"
+                className="object-contain cursor-pointer bg-gray-200"
               />
             </div>
             <div className="p-5 rounded-xl">
