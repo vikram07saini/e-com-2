@@ -207,6 +207,21 @@ const zoomOut = () => {
     });
   }
 }, [selectedStory]);
+useEffect(() => {
+  const handleExternalSelect = (e) => {
+    const id = e.detail;
+    const product = ShopData.find((p) => p.id === id);
+    if (product) {
+      handleProductClick(product); 
+    }
+  };
+
+  window.addEventListener("productSelected", handleExternalSelect);
+  return () => {
+    window.removeEventListener("productSelected", handleExternalSelect);
+  };
+}, []);
+
   return (
     <>
       <div className="relative min-h-screen h-[500px] ">
@@ -282,7 +297,7 @@ const zoomOut = () => {
         {!selectedShoe && !selectedStory && (
           <div className="transition-all duration-200">
             <div
-              className={`group grid gap-5 p-10 pb-20 mt-10 ${
+              className={`group grid gap-5 p-10 pb-20  ${
                 gridCols === 1
                   ? "grid-cols-1"
                   : gridCols === 2
