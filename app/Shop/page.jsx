@@ -464,14 +464,14 @@ useEffect(() => {
                 alt="shoe360"
                 width={150}
                 height={150}
-                className="object-contain cursor-pointer bg-gray-200"
+                className="object-contain cursor-pointer bg-gray-200 rounded-2xl"
               />
               <Image
                 src={img21}
                 alt="shoe360"
                 width={150}
                 height={150}
-                className="object-contain cursor-pointer bg-gray-200"
+                className="object-contain cursor-pointer bg-gray-200 rounded-2xl"
               />
             </div>
             <div className="p-5 rounded-xl">
