@@ -187,7 +187,7 @@ export default function Sidebar({ children }) {
             </div>
             <nav className="flex flex-col lg:flex-row gap-3 px-5 mt-2">
               <Link href="/home" className={linkClass("/home")}>
-                INDEXX
+                INDEX
               </Link>
               <Link href="/Stories" className={linkClass("/Stories")}>
                 STORIES
