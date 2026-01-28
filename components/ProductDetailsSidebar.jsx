@@ -14,15 +14,15 @@ export default function ProductDetailsSidebar({ product }) {
     <>
       <button
         onClick={() => setIsBookmarked(!isBookmarked)}
-        className="text-2xl"
+        className="text-2xl p-5 mt-5"
         aria-label="Bookmark"
       >
         {isBookmarked ? <IoMdBookmark /> : <IoBookmarkOutline />}
       </button>
 
-      <p className="p-2">09.04.22</p>
+      <p className="pl-5">09.04.22</p>
 
-      <div className="p-2">
+      <div className="pl-5">
         <h2 className="mt-4 text-lg font-semibold">{product.name}</h2>
 
         {product.price && (

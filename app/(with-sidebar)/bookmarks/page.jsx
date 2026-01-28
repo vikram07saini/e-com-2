@@ -57,19 +57,19 @@ const Page = () => {
           <div className="w-full max-w-[400px] pe-5 mx-auto md:mx-0 md:w-[400px]">
             <button
               onClick={() => setIsBookmarked(!isBookmarked)}
-              className="text-2xl"
+              className="text-2xl p-5 mt-5"
               aria-label="Bookmark"
             >
               {isBookmarked ? <IoMdBookmark /> : <IoBookmarkOutline />}
             </button>
 
-            <h1 className="pt-3 pb-3 text-center md:text-left">09.04.22</h1>
+            <h1 className=" pl-5 text-center md:text-left">09.04.22</h1>
 
-            <h1 className="font-semibold text-lg sm:text-xl text-center md:text-left">
+            <h1 className="font-semibold text-lg sm:text-xl text-center md:text-left p-5">
               The North Face Nuptse Traction Chukka
             </h1>
 
-            <p className="text-sm pt-5 md:me-10 text-justify">
+            <p className="text-sm pt-5 md:me-10 text-justify p-5">
               Borrowing its nomenclature from The North Face's stalwart
               outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka is
               a winterised footwear silhouette combining comfort and protection.
@@ -82,8 +82,8 @@ const Page = () => {
             </p>
           </div>
 
-          <div className="pt-[5px] mt-6">
-            <p className="text-center md:text-left">SIMILAR PRODUCTS</p>
+          <div className="pt-[5px] mt-6 p-3">
+            <p className="text-center md:text-left ml-2">SIMILAR PRODUCTS</p>
             <div className="flex flex-wrap justify-center md:justify-start gap-7">
               <Image
                 src={RelatedImg}

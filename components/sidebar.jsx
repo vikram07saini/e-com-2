@@ -119,23 +119,22 @@ export default function Sidebar({ children }) {
 
   return (
     <>
-      <div className="hidden lg:block p-2 lg:rounded-2xl lg:w-[700px]">
-        <aside
-          className="
-      fixed lg:relative
-      top-0 left-0
-      bg-white
-      pr-4
-      lg:rounded-3xl
-      z-40
-      w-full lg:w-[400px]
-  h-screen
-      grid
-      grid-rows-[88%_12%]
-    "
-        >
-          <div className="flex flex-col overflow-hidden">
-            <div className="hidden lg:flex p-5 justify-between items-center">
+      <div className="hidden lg:block pt-5 pl-5 pb-5 rounded-2xl lg:w-[200px]">
+<aside className="
+  fixed
+  bg-white
+  pr-4
+  rounded-2xl
+  overflow-hidden
+  z-40
+  w-full lg:w-[370px]
+  h-[95.4%]
+  mb-20
+  flex flex-col
+">
+<div className="flex flex-col overflow-hidden min-h-0">
+
+            <div className="hidden rounded-3xl lg:flex p-5 justify-between items-center">
               <Link
                 href="/"
                 onClick={(e) => {
@@ -188,7 +187,7 @@ export default function Sidebar({ children }) {
             </div>
             <nav className="flex flex-col lg:flex-row gap-3 px-5 mt-2">
               <Link href="/home" className={linkClass("/home")}>
-                INDEX
+                INDEXX
               </Link>
               <Link href="/Stories" className={linkClass("/Stories")}>
                 STORIES
@@ -219,14 +218,16 @@ export default function Sidebar({ children }) {
             </div>
           </div>
           <div
-            className="hidden lg:flex items-center gap-5 px-5
-                sticky bottom-0 bg-white p-3 z-50"
-          >
-            <label htmlFor="Find" className="text-sm font-medium">
+  className="m-1 lg:flex items-center gap-5 px-5
+  sticky bottom-0 bg-white p-4 z-50
+  shadow-[0_-10px_10px_rgba(255,255,255,0.9)]"
+>
+
+            <label htmlFor="Find" className="text-sm font-medium ">
               FIND
             </label>
             <input
-              className="bg-gray-100 text-sm w-full p-2 rounded-lg"
+              className="bg-gray-100 text-sm w-[90%] p-2 rounded-lg"
               placeholder="Search Brand, Style, Colour or Year"
             />
           </div>

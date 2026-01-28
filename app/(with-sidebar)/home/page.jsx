@@ -146,7 +146,7 @@ const handleProductClick = (item) => {
       <div
         className="
           w-full
-          sm:w-[400px]
+          sm:w-[350px]
           max-h-[87vh]
           p-3
           sm:p-5
@@ -161,7 +161,7 @@ const handleProductClick = (item) => {
               <button
                 onClick={() => handleProductClick(item)}
                 className="
-                  w-full text-left flex gap-2 text-xs sm:text-sm md:text-sm 
+                  w-full text-left flex gap-2 text-xs 
                   hover:underline items-center whitespace-nowrap 
                   overflow-hidden text-ellipsis cursor-pointer
                   hover:bg-gray-50 p-1 rounded
