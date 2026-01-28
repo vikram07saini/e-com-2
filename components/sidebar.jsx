@@ -115,11 +115,11 @@ const linkClass = (path) => {
     (path === "/Stories" && isStoryDetail) ||
     (path === "/bookmarks" && isBookmarks);
 
-  return `
-    transition-all duration-200
-    ${isActive ? "text-red-500 font-semibold pl-4" : "text-black hover:text-red-500"}
-  `;
+  return isActive
+    ? "text-red-500 font-semibold skew-x-[-12deg] translate-x-2 transition-all duration-200 inline-block"
+    : "text-black hover:text-red-500 transition-all duration-200 inline-block";
 };
+
 
   const showBackButton =
     selectedProduct !== null || isStoryDetail !== null || mobileFull === true;
