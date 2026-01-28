@@ -3,10 +3,8 @@ import "./globals.css";
 import Sidebar from "@/components/sidebar";
 import SHOP from "@/app/Shop/page.jsx";
 
-
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
   weight: ["100","200","300","400","500","600","700","800","900"],
 });
 
@@ -18,26 +16,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         
-<div className="grid grid-cols-1 lg:grid-cols-12 h-screen">
+        <div className="grid grid-cols-1 lg:grid-cols-12 h-screen">
+          <aside className="lg:col-span-3 overflow-y-auto bg-[#F5F5F5]">
+            <Sidebar />
+          </aside>
 
-
-  <aside className="lg:col-span-3 overflow-y-auto bg-[#F5F5F5]">
-    <Sidebar />
-  </aside>
-  <main 
-  
-  id="main-scroll"
-  className="lg:col-span-9  overflow-y-auto h-screen bg-gray-100 flex justify-center lg:justify-start">
-    <div className="w-full max-w-5xl lg:max-w-none">
-      <SHOP />
-    
-    </div>
-  </main>
-
-</div>
-
+          <main
+            id="main-scroll"
+            className="lg:col-span-9 overflow-y-auto h-screen bg-gray-100 flex justify-center lg:justify-start"
+          >
+            <div className="w-full max-w-5xl lg:max-w-none">
+              <SHOP />
+            </div>
+          </main>
+        </div>
 
       </body>
     </html>
