@@ -129,16 +129,18 @@ const linkClass = (path) => {
       <div className="hidden lg:block pt-5 pl-5 pb-5 rounded-2xl lg:w-[200px]">
 <aside className="
   fixed
+  top-4
+  bottom-4
   bg-white
   pr-4
   rounded-2xl
   overflow-hidden
   z-40
   w-full lg:w-[370px]
-  h-[95.4%]
-  mb-20
   flex flex-col
 ">
+
+
 <div className="flex flex-col overflow-hidden min-h-0">
 
             <div className="hidden rounded-3xl lg:flex p-5 justify-between items-center">

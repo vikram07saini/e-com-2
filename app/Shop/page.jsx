@@ -297,7 +297,7 @@ useEffect(() => {
         {!selectedShoe && !selectedStory && (
           <div className="transition-all duration-200">
             <div
-              className={`group grid gap-5 p-10 pb-20  ${
+              className={`group grid gap-5 p-10 pb-20 pt-20 lg:pt-5 ${
                 gridCols === 1
                   ? "grid-cols-1"
                   : gridCols === 2
