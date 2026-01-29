@@ -126,6 +126,20 @@ export default function Page() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+  useEffect(() => {
+  const handleCloseProduct = () => {
+    setSelectedShoe(null);
+    setActiveSlides([]);
+    setCurrentSlide(0);
+  };
+
+  window.addEventListener("closeProductDetails", handleCloseProduct);
+
+  return () => {
+    window.removeEventListener("closeProductDetails", handleCloseProduct);
+  };
+}, []);
+
 
   const isStoriesPage = pathname.startsWith("/Stories");
   useEffect(() => {

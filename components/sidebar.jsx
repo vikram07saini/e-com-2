@@ -194,20 +194,52 @@ const linkClass = (path) => {
                 </Link>
               )}
             </div>
-            <nav className="flex flex-col lg:flex-row gap-3 px-5 mt-2">
-              <Link href="/home" className={linkClass("/home")}>
-                INDEX
-              </Link>
-              <Link href="/Stories" className={linkClass("/Stories")}>
-                STORIES
-              </Link>
-              <Link href="/" className={linkClass("/")}>
-                SHOP
-              </Link>
-              <Link href="/bookmarks" className={linkClass("/bookmarks")}>
-                BOOKMARKS
-              </Link>
-            </nav>
+          <nav className="flex flex-col lg:flex-row gap-3 px-5 mt-2">
+  <Link
+    href="/home"
+    className={linkClass("/home")}
+    onClick={() => {
+      setSelectedProduct(null);
+      window.dispatchEvent(new CustomEvent("closeProductDetails"));
+    }}
+  >
+    INDEX
+  </Link>
+
+  <Link
+    href="/Stories"
+    className={linkClass("/Stories")}
+    onClick={() => {
+      setSelectedProduct(null);
+      window.dispatchEvent(new CustomEvent("closeProductDetails"));
+    }}
+  >
+    STORIES
+  </Link>
+
+  <Link
+    href="/"
+    className={linkClass("/")}
+    onClick={() => {
+      setSelectedProduct(null);
+      window.dispatchEvent(new CustomEvent("closeProductDetails"));
+    }}
+  >
+    SHOP
+  </Link>
+
+  <Link
+    href="/bookmarks"
+    className={linkClass("/bookmarks")}
+    onClick={() => {
+      setSelectedProduct(null);
+      window.dispatchEvent(new CustomEvent("closeProductDetails"));
+    }}
+  >
+    BOOKMARKS
+  </Link>
+</nav>
+
            <div className="relative flex-1 overflow-y-auto text-sm">
 
               {selectedProduct ? (

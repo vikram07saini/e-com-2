@@ -3,19 +3,27 @@ import { useState } from "react";
 import { IoMdBookmark } from "react-icons/io";
 import { IoBookmarkOutline } from "react-icons/io5";
 import Image from "next/image";
-import RelatedImg from "@/public/RelatedImages/related1.svg";
+import ShopData from "@/data/ShopData";
 
 export default function ProductDetailsSidebar({ product }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   if (!product) return null;
 
+
+const currentIndex = ShopData.findIndex(p => p.id === product.id);
+
+const similarProducts = [
+  ShopData[(currentIndex + 1) % ShopData.length],
+  ShopData[(currentIndex + 2) % ShopData.length],
+];
+
+
   return (
     <>
       <button
         onClick={() => setIsBookmarked(!isBookmarked)}
         className="text-2xl p-5 mt-5"
-        aria-label="Bookmark"
       >
         {isBookmarked ? <IoMdBookmark /> : <IoBookmarkOutline />}
       </button>
@@ -25,47 +33,36 @@ export default function ProductDetailsSidebar({ product }) {
       <div className="pl-5">
         <h2 className="mt-1 text-lg font-semibold">{product.name}</h2>
 
-        {product.price && (
-          <p className="mt-2 text-gray-600">₹ {product.price}</p>
-        )}
-
         <p>
           Borrowing its nomenclature from The North Face's stalwart outerwear
           style, the Nuptse Jacket, the Nuptse Traction Chukka is a winterised
           footwear silhouette combining comfort and protection...
         </p>
-<div className="pt-[150px] lg:fixed lg:bottom-20">
-  <p className="font-semibold">SIMILAR PRODUCTS</p>
-<div className="flex gap-2">
- <Image
-  src={RelatedImg}
-  alt="related"
-  width={150}
-  height={150}
-  className="cursor-pointer"
-  onClick={() =>
-    window.dispatchEvent(
-      new CustomEvent("changeBigImage", { detail: RelatedImg })
-    )
-  }
-/>
 
-<Image
-  src={RelatedImg}
-  alt="related"
-  width={150}
-  height={150}
-  className="brightness-75 hover:brightness-100 transition cursor-pointer"
-  onClick={() =>
-    window.dispatchEvent(
-      new CustomEvent("changeBigImage", { detail: RelatedImg })
-    )
-  }
-/>
-</div>
+        <div className="pt-[150px] lg:fixed lg:bottom-20">
+          <p className="font-semibold">SIMILAR PRODUCTS</p>
 
-</div>
-
+          <div className="flex gap-2">
+            {similarProducts.map((item) => (
+              <Image
+                key={item.id}
+                src={item.img}
+                alt={item.name}
+                width={150}
+                height={150}
+                className="cursor-pointer bg-gray-200 rounded-xl hover:scale-105 transition"
+                onClick={() => {
+                  window.dispatchEvent(
+                    new CustomEvent("openProductDetails", { detail: item })
+                  );
+                  window.dispatchEvent(
+                    new CustomEvent("changeBigImage", { detail: item.img })
+                  );
+                }}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
