@@ -226,20 +226,20 @@ const linkClass = (path) => {
               
             </div>
           </div>
-          <div
-  className="m-1 lg:flex items-center gap-5 px-5
-  sticky bottom-0 bg-white p-4 z-50
+        <div
+  className="fixed bottom-4 left-0 lg:left-[30px] bg-white p-4 z-50
+  flex items-center gap-5 px-5 lg:w-[350px]
   shadow-[0_-10px_10px_rgba(255,255,255,0.9)]"
 >
+  <label htmlFor="Find" className="text-sm font-medium">
+    FIND
+  </label>
+  <input
+    className="bg-gray-100 text-xs w-[90%] p-2 rounded-lg"
+    placeholder="Search Brand, Style, Colour or Year"
+  />
+</div>
 
-            <label htmlFor="Find" className="text-sm font-medium ">
-              FIND
-            </label>
-            <input
-              className="bg-gray-100 text-xs w-[90%] p-2 rounded-lg"
-              placeholder="Search Brand, Style, Colour or Year"
-            />
-          </div>
         </aside>
       </div>
 
