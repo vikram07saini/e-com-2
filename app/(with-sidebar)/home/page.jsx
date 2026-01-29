@@ -142,7 +142,7 @@ const handleProductClick = (item) => {
 
 
   return (
-    <div className="flex md:block justify-center md:justify-start px-2 sm:px-4 md:px-0 ">
+    <div className="flex md:block justify-center md:justify-start px-2 sm:px-4 md:px-0 pb-20">
       <div
         className="
           w-full
