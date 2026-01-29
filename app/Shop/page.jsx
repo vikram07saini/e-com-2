@@ -246,7 +246,6 @@ export default function Page() {
     const handleImageChange = (e) => {
       const newImg = e.detail;
 
-      // Put clicked image as first slide
       setActiveSlides((prev) => [
         newImg,
         ...prev.filter((img) => img !== newImg),
@@ -498,7 +497,7 @@ export default function Page() {
             <div className="mt-8 pl-8 lg:hidden bg-gray-100">
               <h1>SIMILAR PRODUCTS</h1>
             </div>
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-95">
+            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-95 ">
               <Image
                 src={slides[0]}
                 alt="shoe1"
