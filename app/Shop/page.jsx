@@ -389,11 +389,11 @@ useEffect(() => {
                 <div className="relative w-full flex justify-center items-center">
                   <button
                     onClick={prevSlide}
-                    className="absolute left-[-12] text-3xl z-10 px-3 py-2"
+                    className="absolute left-[-12] text-3xl z-10 px-3 py-2 lg:mt-20"
                   >
                     <HiOutlineArrowSmLeft />
                   </button>
-                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center bg-gray-100">
+                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center bg-gray-100 mt-30">
                     <Image
                       src={slides[currentSlide]}
                       alt={Slide[0].name}
@@ -408,7 +408,7 @@ useEffect(() => {
                   </div>
                   <button
                     onClick={nextSlide}
-                    className="absolute right-[-10] z-10 px-3 py-2 text-3xl"
+                    className="absolute right-[-10] lg:mt-20 z-10 px-3 py-2 text-3xl"
                   >
                     <HiOutlineArrowSmRight />
                   </button>
