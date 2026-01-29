@@ -40,9 +40,9 @@ const similarProducts = [
         </p>
 
         <div className="pt-[150px] lg:fixed lg:bottom-20">
-          <p className="font-semibold">SIMILAR PRODUCTS</p>
+          <p className="font-semibold lg:pb-4">SIMILAR PRODUCTS</p>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 pb-2">
             {similarProducts.map((item) => (
               <Image
                 key={item.id}
@@ -50,7 +50,7 @@ const similarProducts = [
                 alt={item.name}
                 width={150}
                 height={150}
-                className="cursor-pointer bg-gray-200 rounded-xl hover:scale-105 transition"
+                className="cursor-pointer bg-gray-100 rounded-xl hover:scale-105 transition"
                 onClick={() => {
                   window.dispatchEvent(
                     new CustomEvent("openProductDetails", { detail: item })
