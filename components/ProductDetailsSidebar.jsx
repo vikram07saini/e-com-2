@@ -34,20 +34,38 @@ export default function ProductDetailsSidebar({ product }) {
           style, the Nuptse Jacket, the Nuptse Traction Chukka is a winterised
           footwear silhouette combining comfort and protection...
         </p>
+<div className="pt-[150px] lg:fixed lg:bottom-20">
+  <p className="font-semibold">SIMILAR PRODUCTS</p>
+<div className="flex gap-2">
+ <Image
+  src={RelatedImg}
+  alt="related"
+  width={150}
+  height={150}
+  className="cursor-pointer"
+  onClick={() =>
+    window.dispatchEvent(
+      new CustomEvent("changeBigImage", { detail: RelatedImg })
+    )
+  }
+/>
 
-        <div className="pt-[150px] lg:fixed lg:bottom-20 ">
-          <p className="font-semibold"> SIMILAR PRODUCTS</p>
-          <div className="flex gap-7">
-            <Image src={RelatedImg} alt="related" width={150} height={150} />     
-            <Image
-              src={RelatedImg}
-              alt="related"
-              width={150}
-              height={150}
-              className="brightness-75 hover:brightness-100 transition"
-            />
-          </div>
-        </div>
+<Image
+  src={RelatedImg}
+  alt="related"
+  width={150}
+  height={150}
+  className="brightness-75 hover:brightness-100 transition cursor-pointer"
+  onClick={() =>
+    window.dispatchEvent(
+      new CustomEvent("changeBigImage", { detail: RelatedImg })
+    )
+  }
+/>
+</div>
+
+</div>
+
       </div>
     </>
   );

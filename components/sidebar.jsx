@@ -170,7 +170,7 @@ const linkClass = (path) => {
 
               {showBackButton && (
                 <Link
-                  className="mr-10"
+                  className="mr-[-15]"
                   href="/"
                   onClick={(e) => {
                     if (window.innerWidth < 1024) return;

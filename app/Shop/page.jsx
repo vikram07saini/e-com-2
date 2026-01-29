@@ -221,6 +221,33 @@ useEffect(() => {
     window.removeEventListener("productSelected", handleExternalSelect);
   };
 }, []);
+useEffect(() => {
+  const handleImageChange = (e) => {
+    setCurrentSlide(e.detail);
+  };
+
+  window.addEventListener("changeBigImage", handleImageChange);
+
+  return () => {
+    window.removeEventListener("changeBigImage", handleImageChange);
+  };
+}, []);
+useEffect(() => {
+  const handleImageChange = (e) => {
+    const newImg = e.detail;
+
+    // Put clicked image as first slide
+    setActiveSlides((prev) => [newImg, ...prev.filter(img => img !== newImg)]);
+    setCurrentSlide(0);
+  };
+
+  window.addEventListener("changeBigImage", handleImageChange);
+
+  return () => {
+    window.removeEventListener("changeBigImage", handleImageChange);
+  };
+}, []);
+
 
   return (
     <>
@@ -393,12 +420,13 @@ useEffect(() => {
                   >
                     <HiOutlineArrowSmLeft />
                   </button>
-                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center bg-gray-100 mt-30">
+                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center bg-gray-100 mt-30 pb-14">
                     <Image
                       src={slides[currentSlide]}
                       alt={Slide[0].name}
                       width={600}
                       height={400}
+                      
                       className={`
           object-contain rounded-xl
           transition-all duration-300 ease-in-out
@@ -458,22 +486,31 @@ useEffect(() => {
             <div className="mt-8 pl-8 lg:hidden bg-gray-100">
               <h1>SIMILAR PRODUCTS</h1>
             </div>
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-50 mt-2 lg:fixed lg:bottom-1 lg:left-95 ">
-              <Image
-                src={selectedShoe.img}
-                alt="shoe360"
-                width={150}
-                height={150}
-                className="object-contain cursor-pointer bg-gray-200 rounded-2xl"
-              />
-              <Image
-                src={img21}
-                alt="shoe360"
-                width={150}
-                height={150}
-                className="object-contain cursor-pointer bg-gray-200 rounded-2xl"
-              />
-            </div>
+      <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-95">
+  <Image
+    src={slides[0]}
+    alt="shoe1"
+    width={150}
+    height={150}
+    onClick={() => setCurrentSlide(0)}
+    className={`object-contain cursor-pointer bg-white rounded-2xl
+      ${currentSlide === 0 ? "ring-2 ring-blue-500" : ""}
+    `}
+  />
+
+  <Image
+    src={slides[1]}
+    alt="shoe2"
+    width={150}
+    height={150}
+    onClick={() => setCurrentSlide(1)}
+    className={`object-contain cursor-pointer bg-white rounded-2xl
+      ${currentSlide === 1 ? "ring-2 ring-blue-500" : ""}
+    `}
+  />
+</div>
+
+
             <div className="p-5 rounded-xl">
               <div
                 className="
