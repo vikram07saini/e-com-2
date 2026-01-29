@@ -32,43 +32,41 @@ export default function Page() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
- const [gridCols, setGridCols] = useState(2);
+  const [gridCols, setGridCols] = useState(2);
 
-useEffect(() => {
-  const updateGridByScreen = () => {
-    if (window.innerWidth < 1024) {
-      setGridCols(2); // mobile
-    } else {
-      setGridCols(6); // desktop
-    }
-  };
+  useEffect(() => {
+    const updateGridByScreen = () => {
+      if (window.innerWidth < 1024) {
+        setGridCols(2); // mobile
+      } else {
+        setGridCols(6); // desktop
+      }
+    };
 
-  updateGridByScreen();
-  window.addEventListener("resize", updateGridByScreen);
+    updateGridByScreen();
+    window.addEventListener("resize", updateGridByScreen);
 
-  return () => window.removeEventListener("resize", updateGridByScreen);
-}, []);
+    return () => window.removeEventListener("resize", updateGridByScreen);
+  }, []);
 
   const sortedShopData = [...ShopData].sort((a, b) =>
-    sortOrder === "asc" ? a.id - b.id : b.id - a.id
+    sortOrder === "asc" ? a.id - b.id : b.id - a.id,
   );
 
-  
-
   const zoomIn = () => {
-  setGridCols((prev) => {
-    if (prev > 1) return prev - 1;
-    return 1;
-  });
-};
+    setGridCols((prev) => {
+      if (prev > 1) return prev - 1;
+      return 1;
+    });
+  };
 
-const zoomOut = () => {
-  setGridCols((prev) => {
-    const maxCols = window.innerWidth < 1024 ? 2 : 6;
-    if (prev < maxCols) return prev + 1;
-    return maxCols;
-  });
-};
+  const zoomOut = () => {
+    setGridCols((prev) => {
+      const maxCols = window.innerWidth < 1024 ? 2 : 6;
+      if (prev < maxCols) return prev + 1;
+      return maxCols;
+    });
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -122,33 +120,31 @@ const zoomOut = () => {
     }
   };
 
- 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-  
 
   const isStoriesPage = pathname.startsWith("/Stories");
- useEffect(() => {
-  const lowerPath = pathname.toLowerCase();
+  useEffect(() => {
+    const lowerPath = pathname.toLowerCase();
 
-  if (lowerPath === "/stories") {
-    setSelectedStory(stories[0] || null);
-    return;
-  }
+    if (lowerPath === "/stories") {
+      setSelectedStory(stories[0] || null);
+      return;
+    }
 
-  if (lowerPath.startsWith("/stories/")) {
-    const slug = pathname.split("/")[2];
-    const story = stories.find((s) => s.slug === slug);
-    setSelectedStory(story || null);
-    return;
-  }
+    if (lowerPath.startsWith("/stories/")) {
+      const slug = pathname.split("/")[2];
+      const story = stories.find((s) => s.slug === slug);
+      setSelectedStory(story || null);
+      return;
+    }
 
-  setSelectedStory(null);
-}, [pathname]);
+    setSelectedStory(null);
+  }, [pathname]);
 
   const Slide = [
     {
@@ -194,60 +190,62 @@ const zoomOut = () => {
     setCurrentSlide(0);
 
     window.dispatchEvent(
-      new CustomEvent("openProductDetails", { detail: product })
+      new CustomEvent("openProductDetails", { detail: product }),
     );
   };
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
   useEffect(() => {
-  if (selectedStory && storyContentRef.current) {
-    storyContentRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-}, [selectedStory]);
-useEffect(() => {
-  const handleExternalSelect = (e) => {
-    const id = e.detail;
-    const product = ShopData.find((p) => p.id === id);
-    if (product) {
-      handleProductClick(product); 
+    if (selectedStory && storyContentRef.current) {
+      storyContentRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
-  };
+  }, [selectedStory]);
+  useEffect(() => {
+    const handleExternalSelect = (e) => {
+      const id = e.detail;
+      const product = ShopData.find((p) => p.id === id);
+      if (product) {
+        handleProductClick(product);
+      }
+    };
 
-  window.addEventListener("productSelected", handleExternalSelect);
-  return () => {
-    window.removeEventListener("productSelected", handleExternalSelect);
-  };
-}, []);
-useEffect(() => {
-  const handleImageChange = (e) => {
-    setCurrentSlide(e.detail);
-  };
+    window.addEventListener("productSelected", handleExternalSelect);
+    return () => {
+      window.removeEventListener("productSelected", handleExternalSelect);
+    };
+  }, []);
+  useEffect(() => {
+    const handleImageChange = (e) => {
+      setCurrentSlide(e.detail);
+    };
 
-  window.addEventListener("changeBigImage", handleImageChange);
+    window.addEventListener("changeBigImage", handleImageChange);
 
-  return () => {
-    window.removeEventListener("changeBigImage", handleImageChange);
-  };
-}, []);
-useEffect(() => {
-  const handleImageChange = (e) => {
-    const newImg = e.detail;
+    return () => {
+      window.removeEventListener("changeBigImage", handleImageChange);
+    };
+  }, []);
+  useEffect(() => {
+    const handleImageChange = (e) => {
+      const newImg = e.detail;
 
-    // Put clicked image as first slide
-    setActiveSlides((prev) => [newImg, ...prev.filter(img => img !== newImg)]);
-    setCurrentSlide(0);
-  };
+      // Put clicked image as first slide
+      setActiveSlides((prev) => [
+        newImg,
+        ...prev.filter((img) => img !== newImg),
+      ]);
+      setCurrentSlide(0);
+    };
 
-  window.addEventListener("changeBigImage", handleImageChange);
+    window.addEventListener("changeBigImage", handleImageChange);
 
-  return () => {
-    window.removeEventListener("changeBigImage", handleImageChange);
-  };
-}, []);
-
+    return () => {
+      window.removeEventListener("changeBigImage", handleImageChange);
+    };
+  }, []);
 
   return (
     <>
@@ -340,7 +338,7 @@ useEffect(() => {
             >
               {sortedShopData.map((item) => {
                 const isSelected = selectedProductId === item.id;
-                
+
                 return (
                   <div
                     key={item.id}
@@ -352,9 +350,10 @@ useEffect(() => {
                       transition-all duration-300 ease-in-out
                       group-hover:opacity-40 group-hover:bg-white/60
                       hover:opacity-100 hover:bg-gray-100 hover:scale-105 m-3
-                      ${isSelected ? 
-                        "ring-4 ring-blue-500 ring-opacity-70 border-2 border-blue-400 shadow-lg" : 
-                        ""
+                      ${
+                        isSelected
+                          ? "ring-4 ring-blue-500 ring-opacity-70 border-2 border-blue-400 shadow-lg"
+                          : ""
                       }
                     `}
                   >
@@ -375,7 +374,7 @@ useEffect(() => {
                       height={200}
                       className="object-contain mx-auto"
                     />
-                    
+
                     {isSelected && (
                       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded animate-pulse">
                         Selected
@@ -426,7 +425,6 @@ useEffect(() => {
                       alt={Slide[0].name}
                       width={600}
                       height={400}
-                      
                       className={`
           object-contain rounded-xl
           transition-all duration-300 ease-in-out
@@ -486,31 +484,29 @@ useEffect(() => {
             <div className="mt-8 pl-8 lg:hidden bg-gray-100">
               <h1>SIMILAR PRODUCTS</h1>
             </div>
-      <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-95">
-  <Image
-    src={slides[0]}
-    alt="shoe1"
-    width={150}
-    height={150}
-    onClick={() => setCurrentSlide(0)}
-    className={`object-contain cursor-pointer bg-white rounded-2xl
+            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-95">
+              <Image
+                src={slides[0]}
+                alt="shoe1"
+                width={150}
+                height={150}
+                onClick={() => setCurrentSlide(0)}
+                className={`object-contain cursor-pointer bg-white rounded-2xl
       ${currentSlide === 0 ? "ring-2 ring-blue-500" : ""}
     `}
-  />
+              />
 
-  <Image
-    src={slides[1]}
-    alt="shoe2"
-    width={150}
-    height={150}
-    onClick={() => setCurrentSlide(1)}
-    className={`object-contain cursor-pointer bg-white rounded-2xl
+              <Image
+                src={slides[1]}
+                alt="shoe2"
+                width={150}
+                height={150}
+                onClick={() => setCurrentSlide(1)}
+                className={`object-contain cursor-pointer bg-white rounded-2xl
       ${currentSlide === 1 ? "ring-2 ring-blue-500" : ""}
     `}
-  />
-</div>
-
-
+              />
+            </div>
             <div className="p-5 rounded-xl">
               <div
                 className="
