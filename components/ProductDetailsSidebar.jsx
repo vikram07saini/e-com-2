@@ -23,7 +23,7 @@ export default function ProductDetailsSidebar({ product }) {
       <p className="pl-5">09.04.22</p>
 
       <div className="pl-5">
-        <h2 className="mt-4 text-lg font-semibold">{product.name}</h2>
+        <h2 className="mt-1 text-lg font-semibold">{product.name}</h2>
 
         {product.price && (
           <p className="mt-2 text-gray-600">₹ {product.price}</p>
