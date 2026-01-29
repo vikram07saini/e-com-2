@@ -82,7 +82,7 @@ const Page = () => {
             </p>
           </div>
 
-          <div className="pt-[5px] mt-6 p-3">
+          <div className="pt-[5px] mt-6 p-3 pb-25">
             <p className="text-center md:text-left ml-2">SIMILAR PRODUCTS</p>
             <div className="flex flex-wrap justify-center md:justify-start gap-7">
               <Image
