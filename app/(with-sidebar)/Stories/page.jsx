@@ -162,7 +162,7 @@ export default function StoriesPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-2 w-full">
-                  <div className="flex flex-col sm:flex-row sm:gap-4 text-xs uppercase">
+                  <div className="flex flex-col sm:flex-row sm:gap-4   text-xs uppercase lg:justify-between lg:pr-4">
                     <span>{story.category}</span>
                     <span className="mt-1 sm:mt-0">{story.date}</span>
                   </div>
@@ -190,7 +190,7 @@ export default function StoriesPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 w-full">
-                  <div className="flex gap-3 text-xs uppercase text-gray-600">
+                  <div className="flex gap-3 text-xs uppercase justify-between pr-2 text-gray-600">
                     <span>{story.category}</span>
                     <span>{story.date}</span>
                   </div>

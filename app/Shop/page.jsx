@@ -3,11 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import ShopData from "@/data/ShopData";
 import { stories } from "@/data/stories.js";
-// import { usePathname } from "next/navigation";
 import Link from "next/link";
-
-import { FaArrowLeft } from "react-icons/fa";
-import img21 from "@/public/ShoesGallery/21.png";
 import story4 from "@/public/storiesImages/story4.png";
 import { FaRegBookmark } from "react-icons/fa6";
 import { HiOutlineArrowSmRight, HiOutlineArrowSmLeft } from "react-icons/hi";
@@ -21,7 +17,6 @@ export default function Page() {
   const [selectedStory, setSelectedStory] = useState(null);
   const pathname = usePathname();
   const router = useRouter(); 
-
   const [isMobile, setIsMobile] = useState(false);
   const storyContentRef = useRef(null);
   const [zoom, setZoom] = useState(1);
@@ -30,9 +25,6 @@ export default function Page() {
   const [isFading, setIsFading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedProductId, setSelectedProductId] = useState(null);
- 
-
-
   const hideOnHome = pathname === "/home";
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
