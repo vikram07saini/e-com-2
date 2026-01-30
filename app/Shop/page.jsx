@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import ShopData from "@/data/ShopData";
 import { stories } from "@/data/stories.js";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { FaArrowLeft } from "react-icons/fa";
@@ -13,12 +13,15 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { HiOutlineArrowSmRight, HiOutlineArrowSmLeft } from "react-icons/hi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import logo from "@/public/logo.svg";
+ import { useRouter, usePathname } from "next/navigation";
 
 export default function Page() {
   const [isFinding, setIsFinding] = useState(false);
   const [selectedShoe, setSelectedShoe] = useState(null);
   const [selectedStory, setSelectedStory] = useState(null);
   const pathname = usePathname();
+  const router = useRouter(); 
+
   const [isMobile, setIsMobile] = useState(false);
   const storyContentRef = useRef(null);
   const [zoom, setZoom] = useState(1);
@@ -27,6 +30,8 @@ export default function Page() {
   const [isFading, setIsFading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedProductId, setSelectedProductId] = useState(null);
+ 
+
 
   const hideOnHome = pathname === "/home";
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -193,20 +198,23 @@ export default function Page() {
   };
 
   const handleProductClick = (product) => {
-    setSelectedShoe(product);
+  router.push(`/product/${product.slug}`);
 
-    const reordered = [
-      product.img,
-      ...Slide[0].images.filter((img) => img !== product.img),
-    ];
+  setSelectedShoe(product);
 
-    setActiveSlides(reordered);
-    setCurrentSlide(0);
+  const reordered = [
+    product.img,
+    ...Slide[0].images.filter((img) => img !== product.img),
+  ];
 
-    window.dispatchEvent(
-      new CustomEvent("openProductDetails", { detail: product }),
-    );
-  };
+  setActiveSlides(reordered);
+  setCurrentSlide(0);
+
+  window.dispatchEvent(
+    new CustomEvent("openProductDetails", { detail: product }),
+  );
+};
+
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
   useEffect(() => {

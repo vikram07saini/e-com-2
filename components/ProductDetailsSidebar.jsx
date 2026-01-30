@@ -4,8 +4,11 @@ import { IoMdBookmark } from "react-icons/io";
 import { IoBookmarkOutline } from "react-icons/io5";
 import Image from "next/image";
 import ShopData from "@/data/ShopData";
+import { useRouter } from "next/navigation";
+
 
 export default function ProductDetailsSidebar({ product }) {
+    const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   if (!product) return null;
@@ -51,14 +54,16 @@ const similarProducts = [
                 width={150}
                 height={150}
                 className="cursor-pointer bg-gray-100 rounded-xl hover:scale-105 transition"
-                onClick={() => {
-                  window.dispatchEvent(
-                    new CustomEvent("openProductDetails", { detail: item })
-                  );
-                  window.dispatchEvent(
-                    new CustomEvent("changeBigImage", { detail: item.img })
-                  );
-                }}
+              onClick={() => {
+  router.push(`/product/${item.slug}`);
+  window.dispatchEvent(
+    new CustomEvent("openProductDetails", { detail: item })
+  );
+  window.dispatchEvent(
+    new CustomEvent("changeBigImage", { detail: item.img })
+  );
+}}
+
               />
             ))}
           </div>
