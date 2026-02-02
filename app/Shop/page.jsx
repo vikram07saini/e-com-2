@@ -363,11 +363,6 @@ export default function Page() {
                       transition-all duration-300 ease-in-out
                       group-hover:opacity-40 group-hover:bg-white/60
                       hover:opacity-100 hover:bg-gray-100 hover:scale-105 m-3
-                      ${
-                        isSelected
-                          ? "ring-4 ring-blue-500 ring-opacity-70 border-2 border-blue-400 shadow-lg"
-                          : ""
-                      }
                     `}
                   >
                     <span className="absolute top-2 left-2 text-xs text-black">
@@ -388,11 +383,11 @@ export default function Page() {
                       className="object-contain mx-auto"
                     />
 
-                    {isSelected && (
+                    {/* {isSelected && (
                       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded animate-pulse">
                         Selected
                       </div>
-                    )}
+                    )} */}
                   </div>
                 );
               })}
@@ -411,7 +406,7 @@ export default function Page() {
 
                   window.dispatchEvent(new CustomEvent("closeProductDetails"));
                 }}
-                className="mb-4 px-8 py-2 text-white bg-white rounded-lg lg:hidden fixed top-7 left-[-4] z-50"
+                className="mb-4 mx-8 py-2 text-white bg-white rounded-lg lg:hidden fixed top-7 left-[-4] z-50"
               >
                 <Image
                   src={logo}

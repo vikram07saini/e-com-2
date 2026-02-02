@@ -39,7 +39,7 @@ const items = [
   },
   {
     id: 8,
-    title: "Puma Suede \"Burger\" by Vandy The Pink",
+    title: 'Puma Suede "Burger" by Vandy The Pink',
     href: "/products/puma-suede-burger",
   },
   {
@@ -55,7 +55,7 @@ const items = [
   { id: 11, title: "Vans Era 95", href: "/products/vans-era-95" },
   {
     id: 12,
-    title: "Arc'teryx Norvan Nivalis In \"Grotto\"",
+    title: 'Arc\'teryx Norvan Nivalis In "Grotto"',
     href: "/products/norvan-nivalis-grotto",
   },
   { id: 13, title: "ROA Hida", href: "/products/roa-hida" },
@@ -90,7 +90,7 @@ const items = [
     href: "/products/nuptse-traction-chukka",
   },
   { id: 20, title: "adidas Adizero Evo SL", href: "/products/adizero-evo-sl" },
-  { id: 21, title: "Puma Speedcat \"Adorne\" by Feature", href: "/products" },
+  { id: 21, title: 'Puma Speedcat "Adorne" by Feature', href: "/products" },
   { id: 22, title: "Clarks Originals Wallabee by Adaptism", href: "/products" },
   { id: 23, title: "adidas Pro Model by Edison Chen ", href: "/products" },
   { id: 24, title: "Mizuno Wave Rider 10 by SLY", href: "/products" },
@@ -106,7 +106,7 @@ const items = [
   },
   {
     id: 31,
-    title: "New Balance FuelCell Rebel V5 \"Samelane\" by Up There Athletics",
+    title: 'New Balance FuelCell Rebel V5 "Samelane" by Up There Athletics',
     href: "/products",
   },
   {
@@ -121,25 +121,21 @@ const items = [
 const Page = () => {
   const router = useRouter();
 
-const handleProductClick = (item) => {
-  const currentParams = new URLSearchParams(window.location.search);
-  currentParams.set("selected", item.id);
+  const handleProductClick = (item) => {
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.set("selected", item.id);
+    if (window.innerWidth < 1024 || window.location.pathname !== "/") {
+      router.push(`/?${currentParams.toString()}`);
+    } else {
+      router.push(`?${currentParams.toString()}`, undefined, { shallow: true });
+    }
 
-  // ✅ If on mobile or not already on shop page, go to shop
-  if (window.innerWidth < 1024 || window.location.pathname !== "/") {
-    router.push(`/?${currentParams.toString()}`);
-  } else {
-    // ✅ Desktop: stay on same page, just update query
-    router.push(`?${currentParams.toString()}`, undefined, { shallow: true });
-  }
-
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(
-      new CustomEvent("productSelected", { detail: item.id })
-    );
-  }
-};
-
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("productSelected", { detail: item.id }),
+      );
+    }
+  };
 
   return (
     <div className="flex md:block justify-center md:justify-start px-2 sm:px-4 md:px-0 pb-20">
