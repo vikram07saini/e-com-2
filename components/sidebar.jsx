@@ -176,18 +176,24 @@ export default function Sidebar({ children }) {
       <header className="lg:hidden fixed top-0 left-0 right-0 bg-white z-50 m-2 rounded-2xl">
         <div className="flex items-center justify-between px-5 py-3 bg-white rounded-xl">
           <Link
-            href="/"
-            onClick={(e) => {
-              if (window.innerWidth < 1024) return;
-              e.preventDefault();
-              setSelectedProduct(null);
-              window.dispatchEvent(new CustomEvent("closeProductDetails"));
-              router.push("/");
-            }}
-            className="flex items-center"
-          >
-            <Image src={logo} alt="logo" width={52} height={52} priority className="cursor-pointer" />
-          </Link>
+  href="/"
+  onClick={() => {
+    setSelectedProduct(null); // close selected shoe
+    window.dispatchEvent(new CustomEvent("closeProductDetails"));
+    router.push("/"); // always go home
+  }}
+  className="flex items-center"
+>
+  <Image
+    src={logo}
+    alt="logo"
+    width={52}
+    height={52}
+    priority
+    className="cursor-pointer"
+  />
+</Link>
+
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

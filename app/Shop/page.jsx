@@ -139,23 +139,33 @@ export default function Page() {
 
 
   const isStoriesPage = pathname.startsWith("/Stories");
-  useEffect(() => {
-    const lowerPath = pathname.toLowerCase();
+useEffect(() => {
+  const lowerPath = pathname.toLowerCase();
+  const isMobile = window.innerWidth < 1024;
 
-    if (lowerPath === "/stories") {
-      setSelectedStory(stories[0] || null);
-      return;
-    }
-
-    if (lowerPath.startsWith("/stories/")) {
-      const slug = pathname.split("/")[2];
-      const story = stories.find((s) => s.slug === slug);
-      setSelectedStory(story || null);
-      return;
-    }
-
+  // MOBILE: show list first
+  if (lowerPath === "/stories" && isMobile) {
     setSelectedStory(null);
-  }, [pathname]);
+    return;
+  }
+
+  // DESKTOP: keep old behavior (auto open first story)
+  if (lowerPath === "/stories" && !isMobile) {
+    setSelectedStory(stories[0] || null);
+    return;
+  }
+
+  // Story detail route
+  if (lowerPath.startsWith("/stories/")) {
+    const slug = pathname.split("/")[2];
+    const story = stories.find((s) => s.slug === slug);
+    setSelectedStory(story || null);
+    return;
+  }
+
+  setSelectedStory(null);
+}, [pathname]);
+
 
   const Slide = [
     {
@@ -275,7 +285,7 @@ export default function Page() {
                 alt={selectedStory.title}
                 width={900}
                 height={200}
-                className="object-contain rounded-xl w-full"
+                className="object-contain rounded-xl w-full mt-11"
               />
             </div>
 
@@ -286,7 +296,7 @@ export default function Page() {
               </div>
               <div className="">{selectedStory.content}</div>
               <div className="mt-6 max-w-md mx-auto text-justify leading-relaxed pb-20">
-                <p>
+                <p className="p-3">
                   I've known Valenti for a few years; we circled each other as
                   something like mutual admirers before we ever talked to one
                   another in person. He's best known as the founder of Ghostly
@@ -396,7 +406,7 @@ export default function Page() {
         )}
         {selectedShoe && (
           <div className="max-w-5xl mx-auto">
-            <Link href="/">
+            {/* <Link href="/">
               <button
                 onClick={() => {
                   setSelectedShoe(null);
@@ -406,7 +416,7 @@ export default function Page() {
 
                   window.dispatchEvent(new CustomEvent("closeProductDetails"));
                 }}
-                className="mb-4 mx-8 py-2 text-white bg-white rounded-lg lg:hidden fixed top-7 left-[-4] z-50"
+                className="mb-4 mx-8 my-2 text-white bg-white rounded-lg lg:hidden fixed top-7 left-[-4] z-50"
               >
                 <Image
                   src={logo}
@@ -416,7 +426,7 @@ export default function Page() {
                   className="object-contain"
                 />
               </button>
-            </Link>
+            </Link> */}
 
             <div className="transition-all duration-200">
               <div className="flex flex-col items-center">
