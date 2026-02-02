@@ -11,7 +11,14 @@ import Bookmarks from "@/app/(with-sidebar)/bookmarks/page.jsx";
 import SHOP from "@/app/Shop/page.jsx";
 
 const MenuIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <line x1="3" y1="12" x2="21" y2="12" />
     <line x1="3" y1="6" x2="21" y2="6" />
     <line x1="3" y1="18" x2="21" y2="18" />
@@ -19,14 +26,28 @@ const MenuIcon = () => (
 );
 
 const CloseIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 
 const ArrowLeftIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <line x1="19" y1="12" x2="5" y2="12" />
     <polyline points="12 19 5 12 12 5" />
   </svg>
@@ -62,6 +83,12 @@ export default function Sidebar({ children }) {
       window.removeEventListener("closeProductDetails", closeHandler);
     };
   }, []);
+  const handleNavClick = (path) => {
+  setSelectedProduct(null); // close selected shoe
+  window.dispatchEvent(new CustomEvent("closeProductDetails"));
+  router.push(path); // go to clicked route
+};
+
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
@@ -106,7 +133,6 @@ export default function Sidebar({ children }) {
       <div className="hidden lg:block pt-5 pl-5 pb-5 rounded-2xl lg:w-[200px]">
         <aside className="fixed top-4 bottom-4 bg-white pr-4 rounded-2xl overflow-hidden z-40 w-full lg:w-[370px] flex flex-col">
           <div className="flex flex-col overflow-hidden min-h-0">
-
             {/* FIXED HEADER */}
             <div className="hidden lg:flex relative h-[80px] px-5 items-center">
               <Link
@@ -119,7 +145,14 @@ export default function Sidebar({ children }) {
                   router.push("/");
                 }}
               >
-                <Image src={logo} alt="logo" width={60} height={60} priority className="cursor-pointer" />
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={60}
+                  height={60}
+                  priority
+                  className="cursor-pointer"
+                />
               </Link>
 
               {showBackButton && (
@@ -130,7 +163,9 @@ export default function Sidebar({ children }) {
                     e.preventDefault();
                     setSelectedProduct(null);
                     setMobileFull(false);
-                    window.dispatchEvent(new CustomEvent("closeProductDetails"));
+                    window.dispatchEvent(
+                      new CustomEvent("closeProductDetails"),
+                    );
                     router.push("/");
                   }}
                   className="absolute right-5 text-red-600"
@@ -140,16 +175,47 @@ export default function Sidebar({ children }) {
               )}
             </div>
 
-            <nav className="flex flex-col lg:flex-row gap-3 px-5">
-              <Link href="/home" className={linkClass("/home")} onClick={() => setSelectedProduct(null)}>INDEX</Link>
-              <Link href="/Stories" className={linkClass("/Stories")} onClick={() => setSelectedProduct(null)}>STORIES</Link>
-              <Link href="/" className={linkClass("/")} onClick={() => setSelectedProduct(null)}>SHOP</Link>
-              <Link href="/bookmarks" className={linkClass("/bookmarks")} onClick={() => setSelectedProduct(null)}>BOOKMARKS</Link>
-            </nav>
+<nav className="flex flex-col lg:flex-row gap-3 px-5">
+  <Link
+    href="/home"
+    className={linkClass("/home")}
+    onClick={() => handleNavClick("/home")}
+  >
+    INDEX
+  </Link>
+
+  <Link
+    href="/Stories"
+    className={linkClass("/Stories")}
+    onClick={() => handleNavClick("/Stories")}
+  >
+    STORIES
+  </Link>
+
+  <Link
+    href="/"
+    className={linkClass("/")}
+    onClick={() => handleNavClick("/")}
+  >
+    SHOP
+  </Link>
+
+  <Link
+    href="/bookmarks"
+    className={linkClass("/bookmarks")}
+    onClick={() => handleNavClick("/bookmarks")}
+  >
+    BOOKMARKS
+  </Link>
+</nav>
+
 
             <div className="relative flex-1 overflow-y-auto text-sm">
               {selectedProduct ? (
-                <ProductDetailsSidebar product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+                <ProductDetailsSidebar
+                  product={selectedProduct}
+                  onClose={() => setSelectedProduct(null)}
+                />
               ) : (
                 <>
                   {isHome && <Index />}
@@ -176,24 +242,23 @@ export default function Sidebar({ children }) {
       <header className="lg:hidden fixed top-0 left-0 right-0 bg-white z-50 m-2 rounded-2xl">
         <div className="flex items-center justify-between px-5 py-3 bg-white rounded-xl">
           <Link
-  href="/"
-  onClick={() => {
-    setSelectedProduct(null); // close selected shoe
-    window.dispatchEvent(new CustomEvent("closeProductDetails"));
-    router.push("/"); // always go home
-  }}
-  className="flex items-center"
->
-  <Image
-    src={logo}
-    alt="logo"
-    width={52}
-    height={52}
-    priority
-    className="cursor-pointer"
-  />
-</Link>
-
+            href="/"
+            onClick={() => {
+              setSelectedProduct(null);
+              window.dispatchEvent(new CustomEvent("closeProductDetails"));
+              router.push("/");
+            }}
+            className="flex items-center"
+          >
+            <Image
+              src={logo}
+              alt="logo"
+              width={52}
+              height={52}
+              priority
+              className="cursor-pointer"
+            />
+          </Link>
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -205,12 +270,22 @@ export default function Sidebar({ children }) {
       </header>
 
       {/* MOBILE MENU */}
-      <aside className={`lg:hidden fixed top-0 left-0 w-screen h-screen bg-white z-40 transition-transform ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <aside
+        className={`lg:hidden fixed top-0 left-0 w-screen h-screen bg-white z-40 transition-transform ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
         <nav className="flex flex-col items-center justify-center h-full gap-6">
-          <Link href="/home" onClick={handleMobileNav}>INDEX</Link>
-          <Link href="/Stories" onClick={handleMobileNav}>STORIES</Link>
-          <Link href="/" onClick={() => handleMobileNav("shop")}>SHOP</Link>
-          <Link href="/bookmarks" onClick={handleMobileNav}>BOOKMARKS</Link>
+          <Link href="/home" onClick={handleMobileNav}>
+            INDEX
+          </Link>
+          <Link href="/Stories" onClick={handleMobileNav}>
+            STORIES
+          </Link>
+          <Link href="/" onClick={() => handleMobileNav("shop")}>
+            SHOP
+          </Link>
+          <Link href="/bookmarks" onClick={handleMobileNav}>
+            BOOKMARKS
+          </Link>
         </nav>
       </aside>
 
