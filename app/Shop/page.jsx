@@ -9,16 +9,15 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { HiOutlineArrowSmRight, HiOutlineArrowSmLeft } from "react-icons/hi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import logo from "@/public/logo.svg";
- import { useRouter, usePathname } from "next/navigation";
- import ProductDetailsSidebar from "@/components/ProductDetailsSidebar";
-
+import { useRouter, usePathname } from "next/navigation";
+import ProductDetailsSidebar from "@/components/ProductDetailsSidebar";
 
 export default function Page() {
   const [isFinding, setIsFinding] = useState(false);
   const [selectedShoe, setSelectedShoe] = useState(null);
   const [selectedStory, setSelectedStory] = useState(null);
   const pathname = usePathname();
-  const router = useRouter(); 
+  const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const storyContentRef = useRef(null);
   const [zoom, setZoom] = useState(1);
@@ -126,42 +125,40 @@ export default function Page() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
   useEffect(() => {
-  const handleCloseProduct = () => {
-    setSelectedShoe(null);
-    setActiveSlides([]);
-    setCurrentSlide(0);
-  };
+    const handleCloseProduct = () => {
+      setSelectedShoe(null);
+      setActiveSlides([]);
+      setCurrentSlide(0);
+    };
 
-  window.addEventListener("closeProductDetails", handleCloseProduct);
+    window.addEventListener("closeProductDetails", handleCloseProduct);
 
-  return () => {
-    window.removeEventListener("closeProductDetails", handleCloseProduct);
-  };
-}, []);
-
+    return () => {
+      window.removeEventListener("closeProductDetails", handleCloseProduct);
+    };
+  }, []);
 
   const isStoriesPage = pathname.startsWith("/Stories");
-useEffect(() => {
-  const lowerPath = pathname.toLowerCase();
-  const isMobile = window.innerWidth < 1024;
-  if (lowerPath === "/stories" && isMobile) {
+  useEffect(() => {
+    const lowerPath = pathname.toLowerCase();
+    const isMobile = window.innerWidth < 1024;
+    if (lowerPath === "/stories" && isMobile) {
+      setSelectedStory(null);
+      return;
+    }
+    if (lowerPath === "/stories" && !isMobile) {
+      setSelectedStory(stories[0] || null);
+      return;
+    }
+    if (lowerPath.startsWith("/stories/")) {
+      const slug = pathname.split("/")[2];
+      const story = stories.find((s) => s.slug === slug);
+      setSelectedStory(story || null);
+      return;
+    }
+
     setSelectedStory(null);
-    return;
-  }
-  if (lowerPath === "/stories" && !isMobile) {
-    setSelectedStory(stories[0] || null);
-    return;
-  }
-  if (lowerPath.startsWith("/stories/")) {
-    const slug = pathname.split("/")[2];
-    const story = stories.find((s) => s.slug === slug);
-    setSelectedStory(story || null);
-    return;
-  }
-
-  setSelectedStory(null);
-}, [pathname]);
-
+  }, [pathname]);
 
   const Slide = [
     {
@@ -196,36 +193,35 @@ useEffect(() => {
   };
 
   const handleProductClick = (product) => {
-  router.push(`/product/${product.slug}`);
+    router.push(`/product/${product.slug}`);
 
-  setSelectedShoe(product);
+    setSelectedShoe(product);
 
-  const reordered = [
-    product.img,
-    ...Slide[0].images.filter((img) => img !== product.img),
-  ];
+    const reordered = [
+      product.img,
+      ...Slide[0].images.filter((img) => img !== product.img),
+    ];
 
-  setActiveSlides(reordered);
-  setCurrentSlide(0);
+    setActiveSlides(reordered);
+    setCurrentSlide(0);
 
-  window.dispatchEvent(
-    new CustomEvent("openProductDetails", { detail: product }),
-  );
-};
-
+    window.dispatchEvent(
+      new CustomEvent("openProductDetails", { detail: product }),
+    );
+  };
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
-useEffect(() => {
-  if (selectedStory) {
-    const main = document.getElementById("main-scroll");
-    if (main) {
-      main.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+  useEffect(() => {
+    if (selectedStory) {
+      const main = document.getElementById("main-scroll");
+      if (main) {
+        main.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
     }
-  }
-}, [selectedStory]);
+  }, [selectedStory]);
 
   useEffect(() => {
     const handleExternalSelect = (e) => {
@@ -274,24 +270,34 @@ useEffect(() => {
     <>
       <div className="relative min-h-screen h-[500px] rounded-2xl ">
         {selectedStory && !selectedShoe && (
-          <div ref={storyContentRef} className="max-w-5xl mx-auto pt-10 mb-10 bg-white rounded-2xl ">
+          <div
+            ref={storyContentRef}
+            className="max-w-5xl mx-auto pt-10 mb-10 bg-white rounded-2xl "
+          >
             <div className="flex justify-center bg-white rounded-2xl mb-6">
-             <Image
-  src={
-    selectedStory.slug === stories[0].slug
-      ? story4
-      : selectedStory.image
-  }
-  alt={selectedStory.title}
-  width={1200}
-  height={600}
-  className="w-full h-160 object-cover rounded-xl mt-11 relative"
-/>
+              <Image
+                src={
+                  selectedStory.slug === stories[0].slug
+                    ? story4
+                    : selectedStory.image
+                }
+                alt={selectedStory.title}
+                width={1200}
+                height={600}
+                className="w-full h-160 object-cover rounded-xl mt-11 relative"
+              />
 
-               <div className="absolute top-125  lg:top-132  lg:left-29 p-3  ">
+              <div className="absolute top-125  lg:top-132  lg:left-29 p-3  ">
                 <h1 className="lg:text-xs text-xs text-white">New Release</h1>
-                <h1 className="lg:text-3xl text-lg text-white">The North Face Nuptse <br/>Traction Chukka</h1>
-                <h1 className="lg:text-white text-sm text-white lg:text-sm">A conversation with Ghostly International founder Sam<br/> Valenti IV on the occasion of his new coffee table book.</h1>
+                <h1 className="lg:text-3xl text-lg text-white">
+                  The North Face Nuptse <br />
+                  Traction Chukka
+                </h1>
+                <h1 className="lg:text-white text-sm text-white lg:text-sm">
+                  A conversation with Ghostly International founder Sam
+                  <br /> Valenti IV on the occasion of his new coffee table
+                  book.
+                </h1>
               </div>
             </div>
 
@@ -339,10 +345,10 @@ useEffect(() => {
                   fine with that.
                 </p>
               </div>
-              <div className="lg:flex gap-5 justify-around pb-50 hidden">
-                <div className="bg-gray-400 w-50 h-50"></div>
-                <div className="bg-gray-400 w-50 h-50"></div>
-                <div className="bg-gray-400 w-50 h-50"></div>
+              <div className="lg:flex  justify-center gap-6 pb-50 hidden">
+                <div className="bg-gray-400 w-50 h-60"></div>
+                <div className="bg-gray-400 w-50 h-60"></div>
+                <div className="bg-gray-400 w-50 h-60"></div>
               </div>
             </div>
           </div>
@@ -398,12 +404,6 @@ useEffect(() => {
                       height={200}
                       className="object-contain mx-auto"
                     />
-
-                    {/* {isSelected && (
-                      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded animate-pulse">
-                        Selected
-                      </div>
-                    )} */}
                   </div>
                 );
               })}
@@ -433,7 +433,6 @@ useEffect(() => {
                 />
               </button>
             </Link> */}
-
             <div className="transition-all duration-200">
               <div className="flex flex-col items-center">
                 <div className="relative w-full flex justify-center items-center">
@@ -676,9 +675,8 @@ useEffect(() => {
                     autoFocus
                   />
                 </div>
-                
               )}
-                <ProductDetailsSidebar product={selectedShoe} />
+              <ProductDetailsSidebar product={selectedShoe} />
             </div>
           </>
         )}
