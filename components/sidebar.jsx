@@ -200,7 +200,7 @@ export default function Sidebar({ children }) {
     SHOP
   </Link>
 
-  <Link
+  <Link 
     href="/bookmarks"
     className={linkClass("/bookmarks")}
     onClick={() => handleNavClick("/bookmarks")}

@@ -10,6 +10,8 @@ import { HiOutlineArrowSmRight, HiOutlineArrowSmLeft } from "react-icons/hi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import logo from "@/public/logo.svg";
  import { useRouter, usePathname } from "next/navigation";
+ import ProductDetailsSidebar from "@/components/ProductDetailsSidebar";
+
 
 export default function Page() {
   const [isFinding, setIsFinding] = useState(false);
@@ -142,20 +144,14 @@ export default function Page() {
 useEffect(() => {
   const lowerPath = pathname.toLowerCase();
   const isMobile = window.innerWidth < 1024;
-
-  // MOBILE: show list first
   if (lowerPath === "/stories" && isMobile) {
     setSelectedStory(null);
     return;
   }
-
-  // DESKTOP: keep old behavior (auto open first story)
   if (lowerPath === "/stories" && !isMobile) {
     setSelectedStory(stories[0] || null);
     return;
   }
-
-  // Story detail route
   if (lowerPath.startsWith("/stories/")) {
     const slug = pathname.split("/")[2];
     const story = stories.find((s) => s.slug === slug);
@@ -219,14 +215,18 @@ useEffect(() => {
 
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
-  useEffect(() => {
-    if (selectedStory && storyContentRef.current) {
-      storyContentRef.current.scrollIntoView({
+useEffect(() => {
+  if (selectedStory) {
+    const main = document.getElementById("main-scroll");
+    if (main) {
+      main.scrollTo({
+        top: 0,
         behavior: "smooth",
-        block: "start",
       });
     }
-  }, [selectedStory]);
+  }
+}, [selectedStory]);
+
   useEffect(() => {
     const handleExternalSelect = (e) => {
       const id = e.detail;
@@ -272,21 +272,27 @@ useEffect(() => {
 
   return (
     <>
-      <div className="relative min-h-screen h-[500px] ">
+      <div className="relative min-h-screen h-[500px] rounded-2xl ">
         {selectedStory && !selectedShoe && (
-          <div ref={storyContentRef} className="max-w-5xl mx-auto pt-10 mb-10">
-            <div className="flex justify-center bg-gray-100 rounded-2xl mb-6">
-              <Image
-                src={
-                  selectedStory.slug === stories[0].slug
-                    ? story4
-                    : selectedStory.image
-                }
-                alt={selectedStory.title}
-                width={900}
-                height={200}
-                className="object-contain rounded-xl w-full mt-11"
-              />
+          <div ref={storyContentRef} className="max-w-5xl mx-auto pt-10 mb-10 bg-white rounded-2xl ">
+            <div className="flex justify-center bg-white rounded-2xl mb-6">
+             <Image
+  src={
+    selectedStory.slug === stories[0].slug
+      ? story4
+      : selectedStory.image
+  }
+  alt={selectedStory.title}
+  width={1200}
+  height={600}
+  className="w-full h-160 object-cover rounded-xl mt-11 relative"
+/>
+
+               <div className="absolute top-125  lg:top-132  lg:left-29 p-3  ">
+                <h1 className="lg:text-xs text-xs text-white">New Release</h1>
+                <h1 className="lg:text-3xl text-lg text-white">The North Face Nuptse <br/>Traction Chukka</h1>
+                <h1 className="lg:text-white text-sm text-white lg:text-sm">A conversation with Ghostly International founder Sam<br/> Valenti IV on the occasion of his new coffee table book.</h1>
+              </div>
             </div>
 
             <div className="transition-all duration-200 ">
@@ -437,7 +443,7 @@ useEffect(() => {
                   >
                     <HiOutlineArrowSmLeft />
                   </button>
-                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center bg-gray-100 mt-30 pb-14">
+                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center  mt-30 pb-14">
                     <Image
                       src={slides[currentSlide]}
                       alt={Slide[0].name}
@@ -502,7 +508,7 @@ useEffect(() => {
             <div className="mt-8 pl-8 lg:hidden bg-gray-100">
               <h1>SIMILAR PRODUCTS</h1>
             </div>
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 bg-gray-100 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-95 ">
+            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
               <Image
                 src={slides[0]}
                 alt="shoe1"
@@ -670,7 +676,9 @@ useEffect(() => {
                     autoFocus
                   />
                 </div>
+                
               )}
+                <ProductDetailsSidebar product={selectedShoe} />
             </div>
           </>
         )}
