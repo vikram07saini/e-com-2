@@ -17,7 +17,7 @@
 //   return (
 //     <html lang="en">
 //       <body className={`${inter.className} antialiased`}>
-        
+
 //         <div className="grid grid-cols-1 lg:grid-cols-12 h-screen">
 //           <aside className="lg:col-span-3 overflow-y-auto bg-[#F5F5F5]">
 //             <Sidebar />
@@ -46,7 +46,7 @@ import MainBgWrapper from "@/components/MainBgWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["100","200","300","400","500","600","700","800","900"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata = {
@@ -58,30 +58,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        
         <div className="grid grid-cols-1 lg:grid-cols-12 h-screen bg-[#F5F5F5]">
           <aside className="lg:col-span-3 overflow-y-auto bg-[#F5F5F5]">
             <Sidebar />
           </aside>
-          
+
           <div className=" lg:col-span-9  lg:rounded-2xl lg:fixed lg:right-0 lg:left-97 ">
-          <div className="lg:col-span-9 m-4 lg:fixed lg:right-0 lg:left-97 bg-white rounded-2xl overflow-hidden">
-  <MainBgWrapper>
-    <main
-      id="main-scroll"
-      className="overflow-y-auto h-screen flex justify-center lg:justify-start"
-    >
-      <div className="w-full max-w-5xl lg:max-w-none">
-        <SHOP />
-      </div>
-    </main>
-  </MainBgWrapper>
-</div>
-
+            <div className="lg:col-span-9 m-4 lg:fixed lg:right-0 lg:left-97 bg-white rounded-2xl overflow-hidden">
+              <MainBgWrapper>
+                <main
+                  id="main-scroll"
+                  className="overflow-y-auto h-screen flex justify-center lg:justify-start"
+                >
+                  <div className="w-full max-w-5xl lg:max-w-none">
+                    <SHOP />
+                  </div>
+                </main>
+              </MainBgWrapper>
+            </div>
           </div>
-
         </div>
-
       </body>
     </html>
   );

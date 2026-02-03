@@ -84,11 +84,10 @@ export default function Sidebar({ children }) {
     };
   }, []);
   const handleNavClick = (path) => {
-  setSelectedProduct(null); // close selected shoe
-  window.dispatchEvent(new CustomEvent("closeProductDetails"));
-  router.push(path); // go to clicked route
-};
-
+    setSelectedProduct(null); // close selected shoe
+    window.dispatchEvent(new CustomEvent("closeProductDetails"));
+    router.push(path); // go to clicked route
+  };
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
@@ -175,40 +174,39 @@ export default function Sidebar({ children }) {
               )}
             </div>
 
-<nav className="flex flex-col lg:flex-row gap-3 px-5">
-  <Link
-    href="/home"
-    className={linkClass("/home")}
-    onClick={() => handleNavClick("/home")}
-  >
-    INDEX
-  </Link>
+            <nav className="flex flex-col lg:flex-row gap-3 px-5">
+              <Link
+                href="/home"
+                className={linkClass("/home")}
+                onClick={() => handleNavClick("/home")}
+              >
+                INDEX
+              </Link>
 
-  <Link
-    href="/Stories"
-    className={linkClass("/Stories")}
-    onClick={() => handleNavClick("/Stories")}
-  >
-    STORIES
-  </Link>
+              <Link
+                href="/Stories"
+                className={linkClass("/Stories")}
+                onClick={() => handleNavClick("/Stories")}
+              >
+                STORIES
+              </Link>
 
-  <Link
-    href="/"
-    className={linkClass("/")}
-    onClick={() => handleNavClick("/")}
-  >
-    SHOP
-  </Link>
+              <Link
+                href="/"
+                className={linkClass("/")}
+                onClick={() => handleNavClick("/")}
+              >
+                SHOP
+              </Link>
 
-  <Link 
-    href="/bookmarks"
-    className={linkClass("/bookmarks")}
-    onClick={() => handleNavClick("/bookmarks")}
-  >
-    BOOKMARKS
-  </Link>
-</nav>
-
+              <Link
+                href="/bookmarks"
+                className={linkClass("/bookmarks")}
+                onClick={() => handleNavClick("/bookmarks")}
+              >
+                BOOKMARKS
+              </Link>
+            </nav>
 
             <div className="relative flex-1 overflow-y-auto text-sm">
               {selectedProduct ? (
