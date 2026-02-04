@@ -534,12 +534,13 @@ export default function Page() {
               Yellow colours are mainstays in The North Face footwear, while a
               Real Tree camo option is a nod to hunting and outdoor wear.
             </h1>
+             <div className="bg-white rounded-b-2xl">
             <div className="mt-8 pl-8 lg:hidden bg-white ">
               <h1 className="pt-5">SIMILAR PRODUCTS</h1>
             </div>
-            
+           
             <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
-   <div className="flex gap-5">
+   <div className="flex gap-5 ">
   {ShopData
     .filter((item) => item.id !== selectedShoe?.id) 
     .slice(0, 2) 
@@ -551,12 +552,13 @@ export default function Page() {
         width={150}
         height={150}
         onClick={() => handleProductClick(item)} 
-        className="object-contain cursor-pointer  rounded-2xl"
+        className="object-contain cursor-pointer  rounded-2xl lg:bg-white  "
       />
     ))}
 </div>
 
 
+            </div>
             </div>
            
             <div className="p-5 rounded-xl">
