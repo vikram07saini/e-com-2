@@ -390,13 +390,11 @@ export default function Page() {
                     <span className="absolute top-2 left-2 text-xs text-black">
                       {item.id}
                     </span>
-
                     {item.sale && (
                       <span className="absolute top-2 right-2 text-xs bg-red-600 text-white px-2 py-1 rounded">
                         {item.sale}
                       </span>
                     )}
-
                     <Image
                       src={item.img}
                       alt={item.name}
@@ -507,7 +505,7 @@ export default function Page() {
             <div className="mt-8 pl-8 lg:hidden bg-gray-100">
               <h1>SIMILAR PRODUCTS</h1>
             </div>
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center pl-7 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
+            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-20 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
               <Image
                 src={slides[0]}
                 alt="shoe1"
