@@ -179,7 +179,7 @@ export default function StoriesPage() {
                       <span>{story.category}</span>
                       <span className="mt-1 sm:mt-0">{story.date}</span>
                     </div>
-                    <h2 className="text-base sm:text-sm font-medium leading-snug">
+                    <h2 className="text-base sm:text-xs font-medium leading-snug">
                       {story.title}
                     </h2>
                   </div>
@@ -209,7 +209,7 @@ export default function StoriesPage() {
                       <span>{story.category}</span>
                       <span>{story.date}</span>
                     </div>
-                    <h2 className="text-base font-medium leading-snug">
+                    <h2 className="text-base text-xs leading-snug">
                       {story.title}
                     </h2>
                   </div>
