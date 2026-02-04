@@ -328,7 +328,10 @@ export default function Page() {
                 <h1 className="text-sm">spotlight:</h1>
                 <h1 className="text-sm">{selectedStory.date}</h1>
               </div>
-              <div className="">{selectedStory.content}</div>
+             <div className="w-full lg:max-w-4xl  px-4 break-words leading-relaxed">
+  {selectedStory.content}
+</div>
+
               <div className="mt-6 max-w-md mx-auto text-justify leading-relaxed pb-20">
                 <p className="p-3">
                   I've known Valenti for a few years; we circled each other as
