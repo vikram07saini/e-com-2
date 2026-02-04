@@ -111,10 +111,10 @@ export default function StoriesPage() {
       )}
       
         {/* <label className="text-sm font-medium whitespace-nowrap">Find</label> */}
-        <input type="text" className="flex-1 w-full p-3 rounded-md text-sm " />
+        {/* <input type="text" className="flex-1 w-full p-3 rounded-md text-sm " />
         <label className="text-sm font-medium whitespace-nowrap mr-5">
           Filter
-        </label>
+        </label> */}
    
     </>
   );
