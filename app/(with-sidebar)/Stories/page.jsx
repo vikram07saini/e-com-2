@@ -52,7 +52,7 @@ export default function StoriesPage() {
               className="block md:hidden"
               onClick={() => window.scrollTo(0, 0)}
             >
-              <div className="flex flex-row gap-4 h-[200px] items-start p-2 bg-[#F5F5F5] hover:bg-[#EDEDED] transition rounded-lg">
+              <div className="flex flex-row mb-2 gap-4 h-[200px] items-start p-5 bg-white hover:bg-[#EDEDED] transition rounded-lg">
                 <div className="w-[120px] h-[120px] flex-shrink-0">
                   <Image
                     src={story.image}
@@ -109,13 +109,13 @@ export default function StoriesPage() {
           </div>
         </div>
       )}
-      <div className="md:hidden w-full flex p-5 mr-20 items-center fixed bottom-0 bg-white gap-3 shadow-sm p-4 z-[10000]">
-        <label className="text-sm font-medium whitespace-nowrap">Find</label>
+      
+        {/* <label className="text-sm font-medium whitespace-nowrap">Find</label> */}
         <input type="text" className="flex-1 w-full p-3 rounded-md text-sm " />
         <label className="text-sm font-medium whitespace-nowrap mr-5">
           Filter
         </label>
-      </div>
+   
     </>
   );
 }

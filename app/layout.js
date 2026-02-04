@@ -64,18 +64,19 @@ export default function RootLayout({ children }) {
           </aside>
 
           <div className=" lg:col-span-9  lg:rounded-2xl lg:fixed lg:right-0 lg:left-97 ">
-            <div className="lg:col-span-9 m-4 lg:fixed lg:right-0 lg:left-97 bg-white rounded-2xl overflow-hidden">
-              <MainBgWrapper>
-                <main
-                  id="main-scroll"
-                  className="overflow-y-auto h-screen flex justify-center lg:justify-start"
-                >
-                  <div className="w-full max-w-5xl lg:max-w-none">
-                    <SHOP />
-                  </div>
-                </main>
-              </MainBgWrapper>
-            </div>
+           <div className="lg:col-span-9 lg:fixed lg:right-0 lg:left-100 lg:mr-4 lg:top-4 lg:bottom-4 bg-white rounded-2xl overflow-hidden">
+  <MainBgWrapper>
+    <main
+      id="main-scroll"
+      className="h-full overflow-y-auto flex justify-center lg:justify-start"
+    >
+      <div className="w-full max-w-5xl lg:max-w-none">
+        <SHOP />
+      </div>
+    </main>
+  </MainBgWrapper>
+</div>
+
           </div>
         </div>
       </body>
