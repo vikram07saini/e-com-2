@@ -31,6 +31,8 @@ export default function Page() {
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const [gridCols, setGridCols] = useState(2);
+   const tagRef = useRef(null);
+   const [showDiv, setShowDiv] = useState(false);
 
   useEffect(() => {
     const updateGridByScreen = () => {
@@ -46,25 +48,75 @@ export default function Page() {
 
     return () => window.removeEventListener("resize", updateGridByScreen);
   }, []);
+useEffect(() => {
+  if (!selectedShoe) return;
+
+  const scrollEl = document.getElementById("main-scroll") || window;
+
+  const getScrollTop = () =>
+    scrollEl === window ? window.scrollY : scrollEl.scrollTop;
+
+  const handleScroll = () => {
+    const top = getScrollTop();
+
+    if (top <= 5) {
+      setShowDiv(false); // hide at top
+    } else {
+      setShowDiv(true); // show when user scrolls
+    }
+  };
+
+  // force hidden when PDP opens
+  setShowDiv(false);
+
+  scrollEl.addEventListener("scroll", handleScroll);
+
+  return () => scrollEl.removeEventListener("scroll", handleScroll);
+}, [selectedShoe?.id]);
+
+useEffect(() => {
+  if (!selectedShoe) return;
+
+  const main = document.getElementById("main-scroll");
+
+  if (main) {
+    main.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  } else {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+}, [selectedShoe?.id]);
 
   const sortedShopData = [...ShopData].sort((a, b) =>
     sortOrder === "asc" ? a.id - b.id : b.id - a.id,
   );
 
   const zoomIn = () => {
-    setGridCols((prev) => {
-      if (prev > 1) return prev - 1;
-      return 1;
-    });
-  };
+  setGridCols((prev) => {
+    const isMobile = window.innerWidth < 1024;
 
-  const zoomOut = () => {
-    setGridCols((prev) => {
-      const maxCols = window.innerWidth < 1024 ? 2 : 6;
-      if (prev < maxCols) return prev + 1;
-      return maxCols;
-    });
-  };
+    if (isMobile) {
+     
+      return prev > 2 ? prev - 1 : 2;
+    } else {
+      return prev > 1 ? prev - 1 : 1;
+    }
+  });
+};
+
+ const zoomOut = () => {
+  setGridCols((prev) => {
+    const isMobile = window.innerWidth < 1024;
+    const maxCols = isMobile ? 3 : 6;
+
+    return prev < maxCols ? prev + 1 : maxCols;
+  });
+};
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -400,34 +452,63 @@ export default function Page() {
                 const isSelected = selectedProductId === item.id;
 
                 return (
-                  <div
-                    key={item.id}
-                    id={`product-${item.id}`}
-                    onClick={() => handleProductClick(item)}
-                    onDoubleClick={() => handleHighlightClick(item)}
-                    className={`
-                      relative bg-gray-100 p-4 cursor-pointer
-                      transition-all duration-300 ease-in-out
-                      group-hover:opacity-40 group-hover:bg-white/60
-                      hover:opacity-100 hover:bg-gray-100 hover:scale-105 m-3
-                    `}
-                  >
-                    <span className="absolute top-2 left-2 text-xs text-black">
-                      {item.id}
-                    </span>
-                    {item.sale && (
-                      <span className="absolute top-2 right-2 text-xs bg-red-600 text-white px-2 py-1 rounded">
-                        {item.sale}
-                      </span>
-                    )}
-                    <Image
-                      src={item.img}
-                      alt={item.name}
-                      width={200}
-                      height={200}
-                      className="object-contain mx-auto"
-                    />
-                  </div>
+    <div
+  key={item.id}
+  id={`product-${item.id}`}
+  onClick={() => handleProductClick(item)}
+  onDoubleClick={() => handleHighlightClick(item)}
+  className={`
+    relative bg-gray-100 p-1 sm:p-3 cursor-pointer
+    transition-all duration-300 ease-in-out
+    group-hover:opacity-40 group-hover:bg-white/60
+    hover:opacity-100 hover:bg-gray-100 hover:scale-105
+    m-1 sm:m-3 
+  `}
+>
+  {/* ID TAG */}
+  <span
+    className="
+      absolute top-1 left-1 sm:top-2 sm:left-2
+      text-[10px] sm:text-xs
+      text-black 
+      px-1 sm:px-2 py-[1px] sm:py-1
+      rounded
+    "
+  >
+    {item.id}
+  </span>
+
+  {/* SALE TAG */}
+  {item.sale && (
+    <span
+      className="
+        absolute top-1 right-1 sm:top-2 sm:right-2
+        text-[10px] sm:text-xs
+        bg-red-600 text-white
+        px-1 sm:px-2 py-[1px] sm:py-1
+        rounded
+      "
+    >
+      {item.sale}
+    </span>
+  )}
+
+  <Image
+    src={item.img}
+    alt={item.name}
+    width={600}
+    height={600}
+    className="
+      object-contain
+      w-full
+      aspect-square
+      mx-auto
+      scale-125 sm:scale-100
+    "
+  />
+</div>
+
+
                 );
               })}
             </div>
@@ -510,19 +591,26 @@ export default function Page() {
     `}
   />
 </div>
-
-
-              <div className="pb-3 lg:hidden bg-white mt-2 rounded-t-2xl ">
-                <h1 className="text-sm pl-7 p-2">20th April 2025</h1>
-              </div>
             </div>
 
-            {/* mobile product detail view  */}
+<div className="mt-5 lg:hidden">
+  {/* Date */}
+  <div className="flex justify-between items-center bg-white p-3 rounded-t-2xl">
+  <span className="text-sm text-gray-600">
+    20th April 2025
+  </span>
+  {/* Bookmark */}
+  <FaRegBookmark className="text-3xl " />
+</div>
+<div className="bg-white  ">
+    {/* Product Name */}
+  <p className="text-2xl font-bold mt-[-10px]  flex-1 mx-3 truncate">
+    {selectedShoe.name}
+  </p>
+</div>
+</div>
 
-            <div className="flex justify-around lg:hidden bg-white">
-              <p className="text-3xl font-bold">{selectedShoe.name}</p>
-              <FaRegBookmark className="text-3xl" />
-            </div>
+
             <h1 className="text-justify leading-relaxed p-5 lg:hidden bg-white ">
               Borrowing its nomenclature from The North Face's stalwart
               outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka is
@@ -537,6 +625,33 @@ export default function Page() {
               Yellow colours are mainstays in The North Face footwear, while a
               Real Tree camo option is a nod to hunting and outdoor wear.
             </h1>
+ <div
+  ref={tagRef}
+  className={`flex gap-1  lg:hidden mt-5 rounded-xl
+    transition-all duration-500 mt-[-40px] pl-5  
+    ${showDiv ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
+  `}
+>
+  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+    The North Face
+  </h1>
+  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+    Nov 2025
+  </h1>
+  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+    Camouflage
+  </h1>
+  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+    High
+  </h1>
+  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+    Slip On
+  </h1>
+</div>
+
+
+
+
              <div className="bg-white rounded-b-2xl">
             <div className="mt-8 pl-8 lg:hidden bg-white ">
               <h1 className="pt-5">SIMILAR PRODUCTS</h1>
