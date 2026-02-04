@@ -84,6 +84,28 @@ export default function Page() {
       }
     }
   }, []);
+ useEffect(() => {
+  if (pathname.startsWith("/product/")) {
+    const slug = pathname.split("/")[2];
+    const product = ShopData.find((p) => p.slug === slug);
+
+    if (product) {
+      setSelectedShoe(product);
+
+      const reordered = [
+        product.img,
+        ...Slide[0].images.filter((img) => img !== product.img),
+      ];
+
+      setActiveSlides(reordered);
+      setCurrentSlide(0);
+      window.dispatchEvent(
+        new CustomEvent("openProductDetails", { detail: product })
+      );
+    }
+  }
+}, [pathname]);
+
 
   useEffect(() => {
     const handleProductSelected = (e) => {
@@ -274,32 +296,32 @@ export default function Page() {
             ref={storyContentRef}
             className="max-w-5xl mx-auto pt-10 mb-10 bg-white rounded-2xl "
           >
-            <div className="flex justify-center bg-white rounded-2xl mb-6">
-              <Image
-                src={
-                  selectedStory.slug === stories[0].slug
-                    ? story4
-                    : selectedStory.image
-                }
-                alt={selectedStory.title}
-                width={1200}
-                height={600}
-                className="w-full h-160 object-cover rounded-xl mt-11 relative"
-              />
+       <div className="relative flex justify-center bg-white rounded-2xl mb-6">
+  <Image
+    src={
+      selectedStory.slug === stories[0].slug
+        ? story4
+        : selectedStory.image
+    }
+    alt={selectedStory.title}
+    width={1200}
+    height={600}
+    className="w-full h-160 object-cover rounded-xl mt-11"
+  />
 
-              <div className="absolute top-125  lg:top-132  lg:left-29 p-3  ">
-                <h1 className="lg:text-xs text-xs text-white">New Release</h1>
-                <h1 className="lg:text-3xl text-lg text-white">
-                  The North Face Nuptse <br />
-                  Traction Chukka
-                </h1>
-                <h1 className="lg:text-white text-sm text-white lg:text-sm">
-                  A conversation with Ghostly International founder Sam
-                  <br /> Valenti IV on the occasion of his new coffee table
-                  book.
-                </h1>
-              </div>
-            </div>
+  <div className="absolute top-[74%] left-[3%] -translate-y-1/6 p-3">
+    <h1 className="text-xs text-white">New Release</h1>
+    <h1 className="lg:text-3xl text-lg text-white">
+      The North Face Nuptse <br />
+      Traction Chukka
+    </h1>
+    <h1 className="text-sm text-white">
+      A conversation with Ghostly International founder Sam
+      <br /> Valenti IV on the occasion of his new coffee table book.
+    </h1>
+  </div>
+</div>
+
 
             <div className="transition-all duration-200 ">
               <div className="flex justify-between pl-2 pr-2 pb-4 lg:hidden">
@@ -462,33 +484,43 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="lg:hidden flex gap-2 bg-gray-100 ">
-                <Image
-                  src={selectedShoe.img}
-                  alt="related"
-                  width={100}
-                  height={100}
-                />
-                <Image
-                  src={selectedShoe.img}
-                  alt="related"
-                  width={100}
-                  height={100}
-                />
-              </div>
+             <div className="lg:hidden flex gap-2 bg-gray-100 pl-7">
+  <Image
+    src={slides[0]}
+    alt="related"
+    width={100}
+    height={100}
+    onClick={() => setCurrentSlide(0)}
+    className={`bg-white rounded-2xl cursor-pointer
+      ${currentSlide === 0 ? "ring-2 ring-blue-500" : ""}
+    `}
+  />
 
-              <div className="pb-3 lg:hidden bg-gray-100">
-                <h1 className="text-sm pl-7">20th April 2025</h1>
+  <Image
+    src={slides[1]}
+    alt="related"
+    width={100}
+    height={100}
+    onClick={() => setCurrentSlide(1)}
+    className={`bg-white rounded-2xl cursor-pointer
+      ${currentSlide === 1 ? "ring-2 ring-blue-500" : ""}
+    `}
+  />
+</div>
+
+
+              <div className="pb-3 lg:hidden bg-white mt-2 rounded-t-2xl ">
+                <h1 className="text-sm pl-7 p-2">20th April 2025</h1>
               </div>
             </div>
 
             {/* mobile product detail view  */}
 
-            <div className="flex justify-around lg:hidden bg-gray-100">
+            <div className="flex justify-around lg:hidden bg-white">
               <p className="text-3xl font-bold">{selectedShoe.name}</p>
               <FaRegBookmark className="text-3xl" />
             </div>
-            <h1 className="text-justify leading-relaxed p-5 lg:hidden bg-gray-100">
+            <h1 className="text-justify leading-relaxed p-5 lg:hidden bg-white ">
               Borrowing its nomenclature from The North Face's stalwart
               outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka is
               a winterised footwear silhouette combining comfort and protection.
@@ -502,32 +534,31 @@ export default function Page() {
               Yellow colours are mainstays in The North Face footwear, while a
               Real Tree camo option is a nod to hunting and outdoor wear.
             </h1>
-            <div className="mt-8 pl-8 lg:hidden bg-gray-100">
-              <h1>SIMILAR PRODUCTS</h1>
+            <div className="mt-8 pl-8 lg:hidden bg-white ">
+              <h1 className="pt-5">SIMILAR PRODUCTS</h1>
             </div>
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-20 pt-5 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
-              <Image
-                src={slides[0]}
-                alt="shoe1"
-                width={150}
-                height={150}
-                onClick={() => setCurrentSlide(0)}
-                className={`object-contain cursor-pointer bg-white rounded-2xl
-      ${currentSlide === 0 ? "ring-2 ring-blue-500" : ""}
-    `}
-              />
+            
+            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
+   <div className="flex gap-5">
+  {ShopData
+    .filter((item) => item.id !== selectedShoe?.id) 
+    .slice(0, 2) 
+    .map((item) => (
+      <Image
+        key={item.id}
+        src={item.img}
+        alt={item.name}
+        width={150}
+        height={150}
+        onClick={() => handleProductClick(item)} 
+        className="object-contain cursor-pointer  rounded-2xl"
+      />
+    ))}
+</div>
 
-              <Image
-                src={slides[1]}
-                alt="shoe2"
-                width={150}
-                height={150}
-                onClick={() => setCurrentSlide(1)}
-                className={`object-contain cursor-pointer bg-white rounded-2xl
-      ${currentSlide === 1 ? "ring-2 ring-blue-500" : ""}
-    `}
-              />
+
             </div>
+           
             <div className="p-5 rounded-xl">
               <div
                 className="
@@ -618,9 +649,10 @@ export default function Page() {
               className="
     lg:hidden
     fixed
-    bottom-0
-    left-0
-    right-0
+    bottom-2
+    left-2
+    right-2
+    rounded-2xl
     z-50
     flex
     items-center

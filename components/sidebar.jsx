@@ -289,7 +289,7 @@ export default function Sidebar({ children }) {
 
       {/* MOBILE FULL VIEW */}
       {mobileFull && (
-        <main className="lg:hidden fixed inset-0 bg-white z-30 p-5 overflow-y-auto mt-8">
+        <main className="lg:hidden fixed inset-0 bg-gray-100 z-30 p-5 overflow-y-auto mt-8">
           <button onClick={openSidebarMobile}>
             <ArrowLeftIcon />
           </button>

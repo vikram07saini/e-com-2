@@ -25,7 +25,7 @@ export default function MainBgWrapper({ children }) {
   }
 
   return (
-    <div className={`${bgClass} w-full h-full p-4`}>
+    <div className={`${bgClass} w-full h-full p-4 `}>
       {cloneElement(children, {
         className: `${children.props.className || ""} ${mainExtraClass}`,
       })}
