@@ -132,7 +132,6 @@ export default function Sidebar({ children }) {
       <div className="hidden lg:block pt-5 pl-5 pb-5 rounded-2xl lg:w-[200px]">
         <aside className="fixed top-4 bottom-4 bg-white pr-4 rounded-2xl overflow-hidden z-40 w-full lg:w-[370px] flex flex-col">
           <div className="flex flex-col overflow-hidden min-h-0">
-            {/* FIXED HEADER */}
             <div className="hidden lg:flex relative h-[80px] px-5 items-center">
               <Link
                 href="/"
@@ -176,7 +175,7 @@ export default function Sidebar({ children }) {
 
             <nav className="flex flex-col lg:flex-row gap-3 px-5">
               <Link
-                href="/home"
+                href="/"
                 className={linkClass("/home")}
                 onClick={() => handleNavClick("/home")}
               >
@@ -272,7 +271,7 @@ export default function Sidebar({ children }) {
         className={`lg:hidden fixed top-0 left-0 w-screen h-screen bg-white z-40 transition-transform ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <nav className="flex flex-col items-center justify-center h-full gap-6">
-          <Link href="/home" onClick={handleMobileNav}>
+          <Link href="/" onClick={handleMobileNav}>
             INDEX
           </Link>
           <Link href="/Stories" onClick={handleMobileNav}>
