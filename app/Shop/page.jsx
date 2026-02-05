@@ -56,23 +56,24 @@ useEffect(() => {
   const getScrollTop = () =>
     scrollEl === window ? window.scrollY : scrollEl.scrollTop;
 
-  const handleScroll = () => {
-    const top = getScrollTop();
+//   const handleScroll = () => {
+//     const top = getScrollTop();
 
-    if (top <= 5) {
-      setShowDiv(false); // hide at top
-    } else {
-      setShowDiv(true); // show when user scrolls
-    }
-  };
+//     if (top <= 5) {
+//       setShowDiv(false); // hide at top
+//     } else {
+//       setShowDiv(true); // show when user scrolls
+//     }
+//   };
 
-  // force hidden when PDP opens
-  setShowDiv(false);
+//   force hidden when PDP opens
+//   setShowDiv(false);
 
-  scrollEl.addEventListener("scroll", handleScroll);
+//   scrollEl.addEventListener("scroll", handleScroll);
 
-  return () => scrollEl.removeEventListener("scroll", handleScroll);
-}, [selectedShoe?.id]);
+//   return () => scrollEl.removeEventListener("scroll", handleScroll);
+// }, [selectedShoe?.id]);
+})
 
 useEffect(() => {
   if (!selectedShoe) return;
@@ -358,10 +359,10 @@ useEffect(() => {
     alt={selectedStory.title}
     width={1200}
     height={600}
-    className="w-full h-160 object-cover rounded-xl mt-11"
+    className="w-full h-120 object-cover rounded-xl mt-11"
   />
 
-  <div className="absolute top-[74%] left-[3%] -translate-y-1/6 p-3">
+  <div className="lg:absolute lg:top-[74%] lg:left-[3%] lg:-translate-y-1/6 lg:p-3 absolute top-[75%] left-[1%] -translate-y-1/4 p-2">
     <h1 className="text-xs text-white">New Release</h1>
     <h1 className="lg:text-3xl text-lg text-white">
       The North Face Nuptse <br />
@@ -434,7 +435,7 @@ useEffect(() => {
         {!selectedShoe && !selectedStory && (
           <div className="transition-all duration-200">
             <div
-              className={`group grid gap-5 p-10 pb-20 pt-20 lg:pt-5 ${
+              className={`group grid gap-6 p-1 pb-20 pt-20 lg:pt-5 ${
                 gridCols === 1
                   ? "grid-cols-1"
                   : gridCols === 2
@@ -514,101 +515,90 @@ useEffect(() => {
             </div>
           </div>
         )}
-        {selectedShoe && (
-          <div className="max-w-5xl mx-auto">
-            {/* <Link href="/">
-              <button
-                onClick={() => {
-                  setSelectedShoe(null);
-                  setSelectedStory(null);
-                  setActiveSlides([]);
-                  setSelectedProductId(null);
+       {selectedShoe && (
+  <div className="max-w-5xl mx-auto lg:block">
 
-                  window.dispatchEvent(new CustomEvent("closeProductDetails"));
-                }}
-                className="mb-4 mx-8 my-2 text-white bg-white rounded-lg lg:hidden fixed top-7 left-[-4] z-50"
-              >
-                <Image
-                  src={logo}
-                  alt="logo"
-                  width={52}
-                  height={52}
-                  className="object-contain"
-                />
-              </button>
-            </Link> */}
-            <div className="transition-all duration-200">
-              <div className="flex flex-col items-center">
-                <div className="relative w-full flex justify-center items-center">
-                  <button
-                    onClick={prevSlide}
-                    className="absolute left-[-12] text-3xl z-10 px-3 py-2 lg:mt-20"
-                  >
-                    <HiOutlineArrowSmLeft />
-                  </button>
-                  <div className="w-[600px] h-[400px] overflow-hidden flex justify-center items-center  mt-30 pb-14">
-                    <Image
-                      src={slides[currentSlide]}
-                      alt={Slide[0].name}
-                      width={600}
-                      height={400}
-                      className={`
-          object-contain rounded-xl
-          transition-all duration-300 ease-in-out
-          ${isFading ? "opacity-0 translate-x-5" : "opacity-100 translate-x-0"}
+           
+           {/* FIXED IMAGE + THUMBNAILS – MOBILE */}
+<div
+  className="
+    lg:static
+    fixed
+    top-[80px]
+    left-0
+    right-0
+    h-[50vh]
+    bg-gray-100
+    z-20
+    flex
+    flex-col
+    justify-center
+    items-center
+  "
+>
+  {/* BIG IMAGE */}
+  <div className="relative w-full flex-1 flex justify-center items-center">
+    <button
+      onClick={prevSlide}
+      className="absolute left-2 text-3xl z-30"
+    >
+      <HiOutlineArrowSmLeft />
+    </button>
+
+    <Image
+      src={slides[currentSlide]}
+      alt={Slide[0].name}
+      width={600}
+      height={400}
+      className={`object-contain transition-all duration-300
+        ${isFading ? "opacity-0 translate-x-5" : "opacity-100 translate-x-0"}
+      `}
+    />
+
+    <button
+      onClick={nextSlide}
+      className="absolute right-2 text-3xl z-30"
+    >
+      <HiOutlineArrowSmRight />
+    </button>
+  </div>
+
+  {/* THUMBNAILS */}
+  <div className="lg:hidden flex gap-2  mr-20 pb-28">
+    {slides.slice(0, 2).map((img, index) => (
+      <Image
+        key={index}
+        src={img}
+        alt="related"
+        width={130}
+        height={130}
+        onClick={() => setCurrentSlide(index)}
+        className={`
+          bg-white rounded-xl cursor-pointer
+          ${currentSlide === index ? "ring-2 ring-blue-500" : ""}
         `}
-                    />
-                  </div>
-                  <button
-                    onClick={nextSlide}
-                    className="absolute right-[-10] lg:mt-20 z-10 px-3 py-2 text-3xl"
-                  >
-                    <HiOutlineArrowSmRight />
-                  </button>
-                </div>
-              </div>
-
-             <div className="lg:hidden flex gap-2 bg-gray-100 pl-7">
-  <Image
-    src={slides[0]}
-    alt="related"
-    width={100}
-    height={100}
-    onClick={() => setCurrentSlide(0)}
-    className={`bg-white rounded-2xl cursor-pointer
-      ${currentSlide === 0 ? "ring-2 ring-blue-500" : ""}
-    `}
-  />
-
-  <Image
-    src={slides[1]}
-    alt="related"
-    width={100}
-    height={100}
-    onClick={() => setCurrentSlide(1)}
-    className={`bg-white rounded-2xl cursor-pointer
-      ${currentSlide === 1 ? "ring-2 ring-blue-500" : ""}
-    `}
-  />
+      />
+    ))}
+  </div>
 </div>
-            </div>
 
-<div className="mt-5 lg:hidden">
+
+<div className="lg:hidden mt-[60vh]">
   {/* Date */}
   <div className="flex justify-between items-center bg-white p-3 rounded-t-2xl">
-  <span className="text-sm text-gray-600">
-    20th April 2025
-  </span>
-  {/* Bookmark */}
-  <FaRegBookmark className="text-3xl " />
+    <span className="text-sm text-gray-600">
+      20th April 2025
+    </span>
+    <FaRegBookmark className="text-3xl" />
+  </div>
+
+  <div className="bg-white">
+    <p className="text-2xl font-bold flex-1 mx-3 truncate">
+      {selectedShoe.name}
+    </p>
+  </div>
 </div>
-<div className="bg-white  ">
-    {/* Product Name */}
-  <p className="text-2xl font-bold mt-[-10px]  flex-1 mx-3 truncate">
-    {selectedShoe.name}
-  </p>
-</div>
-</div>
+
 
 
             <h1 className="text-justify leading-relaxed p-5 lg:hidden bg-white ">
@@ -625,29 +615,38 @@ useEffect(() => {
               Yellow colours are mainstays in The North Face footwear, while a
               Real Tree camo option is a nod to hunting and outdoor wear.
             </h1>
- <div
+<div
   ref={tagRef}
-  className={`flex gap-1  lg:hidden mt-5 rounded-xl
-    transition-all duration-500 mt-[-40px] pl-5  
-    ${showDiv ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-  `}
+  className="
+    lg:hidden
+    flex
+    gap-[0.4rem]
+    rounded-xl
+    pl-[1.25rem]
+    flex-wrap
+  "
 >
-  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
     The North Face
   </h1>
-  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+
+  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
     Nov 2025
   </h1>
-  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+
+  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
     Camouflage
   </h1>
-  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+
+  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
     High
   </h1>
-  <h1 className="bg-gray-300 text-black text-xs p-1 rounded-sm shadow-md">
+
+  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
     Slip On
   </h1>
 </div>
+
 
 
 

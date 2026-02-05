@@ -10,6 +10,7 @@ import Stories from "@/app/(with-sidebar)/Stories/page.jsx";
 import Bookmarks from "@/app/(with-sidebar)/bookmarks/page.jsx";
 import SHOP from "@/app/Shop/page.jsx";
 
+
 const MenuIcon = () => (
   <svg
     width="24"
@@ -61,12 +62,17 @@ export default function Sidebar({ children }) {
   const effectivePath = pathname === "/" ? "/home" : pathname;
   const router = useRouter();
 
-  const handleMobileNav = (path) => {
-    if (window.innerWidth < 1024) {
-      setIsMobileMenuOpen(false);
-      if (path !== "/") setMobileFull(true);
-    }
-  };
+  // const handleMobileNav = (path) => {
+  //   if (window.innerWidth < 1024) {
+  //     setIsMobileMenuOpen(false);
+  //     if (path !== "/") setMobileFull(true);
+  //   }
+  // };
+  const handleMobileNav = () => {
+  setIsMobileMenuOpen(false);
+  setMobileFull(true);
+};
+
 
   const openSidebarMobile = () => {
     if (window.innerWidth < 1024) setMobileFull(false);
@@ -102,13 +108,22 @@ export default function Sidebar({ children }) {
       setMobileFull(false);
     }
   }, [pathname]);
+  useEffect(() => {
+  // If we are on a story detail page, mobileFull must be false
+  if (/^\/Stories\/[^/]+$/.test(pathname)) {
+    setMobileFull(false);
+  }
+}, [pathname]);
+
 
   const isHome = effectivePath === "/home";
   const isStories = effectivePath === "/Stories";
-  const isStoryDetail = effectivePath.match(/^\/Stories\/[^/]+$/);
+  const isStoryDetail = /^\/Stories\/[^/]+$/.test(effectivePath);
+
   const isBookmarks = effectivePath.startsWith("/bookmarks");
   const isHomeMobile = effectivePath === "/home";
-  const isStoriesMobile = effectivePath === "/Stories" || isStoryDetail;
+  const isStoriesMobile = effectivePath === "/Stories";
+
   const isBookmarksMobile = effectivePath.startsWith("/bookmarks");
   const isShopMobile = effectivePath === "/";
 
@@ -215,9 +230,12 @@ export default function Sidebar({ children }) {
                 />
               ) : (
                 <>
-                  {isHome && <Index />}
-                  {(isStories || isStoryDetail) && <Stories />}
-                  {isBookmarks && <Bookmarks />}
+                 {isHome && <Index />}
+
+{(isStories || isStoryDetail) && <Stories />}
+
+{isBookmarks && <Bookmarks />}
+
                 </>
               )}
             </div>
@@ -274,9 +292,18 @@ export default function Sidebar({ children }) {
           <Link href="/home" onClick={handleMobileNav}>
             INDEX
           </Link>
-          <Link href="/Stories" onClick={handleMobileNav}>
-            STORIES
-          </Link>
+<Link
+  href="/Stories"
+  onClick={() => {
+    setIsMobileMenuOpen(false);
+    setMobileFull(true);
+  }}
+>
+  STORIES
+</Link>
+
+
+
           <Link href="/" onClick={() => handleMobileNav("shop")}>
             SHOP
           </Link>
@@ -292,11 +319,12 @@ export default function Sidebar({ children }) {
           <button onClick={openSidebarMobile}>
             <ArrowLeftIcon />
           </button>
+{isHomeMobile && <Index />}
+{isStoriesMobile && <Stories />}
+{isBookmarksMobile && <Bookmarks />}
+{isShopMobile && children}
 
-          {isHomeMobile && <Index />}
-          {isStoriesMobile && <Stories />}
-          {isBookmarksMobile && <Bookmarks />}
-          {isShopMobile && children}
+
         </main>
       )}
     </>
