@@ -33,6 +33,23 @@ export default function Page() {
   const [gridCols, setGridCols] = useState(2);
    const tagRef = useRef(null);
    const [showDiv, setShowDiv] = useState(false);
+   
+   const openPDP = (product) => {
+  router.push(`/product/${product.slug}`, { scroll: false });
+};
+
+   const openProduct = (product) => {
+  setSelectedShoe(product);
+
+  const reordered = [
+    product.img,
+    ...Slide[0].images.filter((img) => img !== product.img),
+  ];
+
+  setActiveSlides(reordered);
+  setCurrentSlide(0);
+};
+
 
   useEffect(() => {
     const updateGridByScreen = () => {
@@ -55,24 +72,6 @@ useEffect(() => {
 
   const getScrollTop = () =>
     scrollEl === window ? window.scrollY : scrollEl.scrollTop;
-
-//   const handleScroll = () => {
-//     const top = getScrollTop();
-
-//     if (top <= 5) {
-//       setShowDiv(false); // hide at top
-//     } else {
-//       setShowDiv(true); // show when user scrolls
-//     }
-//   };
-
-//   force hidden when PDP opens
-//   setShowDiv(false);
-
-//   scrollEl.addEventListener("scroll", handleScroll);
-
-//   return () => scrollEl.removeEventListener("scroll", handleScroll);
-// }, [selectedShoe?.id]);
 })
 
 useEffect(() => {
@@ -118,80 +117,52 @@ useEffect(() => {
     return prev < maxCols ? prev + 1 : maxCols;
   });
 };
+useEffect(() => {
+  if (!pathname.startsWith("/product/")) return;
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const slug = pathname.split("/")[2];
+  const product = ShopData.find((p) => p.slug === slug);
 
-    const params = new URLSearchParams(window.location.search);
-    const selectedId = params.get("selected");
-
-    if (selectedId) {
-      const id = parseInt(selectedId);
-      setSelectedProductId(id);
-
-      const el = document.getElementById(`product-${id}`);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 100);
-      }
-    }
-  }, []);
- useEffect(() => {
-  if (pathname.startsWith("/product/")) {
-    const slug = pathname.split("/")[2];
-    const product = ShopData.find((p) => p.slug === slug);
-
-    if (product) {
-      setSelectedShoe(product);
-
-      const reordered = [
-        product.img,
-        ...Slide[0].images.filter((img) => img !== product.img),
-      ];
-
-      setActiveSlides(reordered);
-      setCurrentSlide(0);
-      window.dispatchEvent(
-        new CustomEvent("openProductDetails", { detail: product })
-      );
-    }
+  if (product) {
+    openProduct(product); 
   }
 }, [pathname]);
 
 
-  useEffect(() => {
-    const handleProductSelected = (e) => {
-      const id = e.detail;
-      setSelectedProductId(id);
 
-      const el = document.getElementById(`product-${id}`);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 100);
-      }
-    };
 
-    window.addEventListener("productSelected", handleProductSelected);
-    return () =>
-      window.removeEventListener("productSelected", handleProductSelected);
-  }, []);
+useEffect(() => {
+  const handleProductSelected = (e) => {
+    const product = e.detail;
+    if (!product) return;
 
-  const handleHighlightClick = (product) => {
-    setSelectedProductId(product.id);
+    setSelectedShoe(product);
 
-    const params = new URLSearchParams(window.location.search);
-    params.set("selected", product.id);
+    const reordered = [
+      product.img,
+      ...Slide[0].images.filter((img) => img !== product.img),
+    ];
 
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.pushState({}, "", newUrl);
-
-    const el = document.getElementById(`product-${product.id}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+    setActiveSlides(reordered);
+    setCurrentSlide(0);
   };
+
+  window.addEventListener("productSelected", handleProductSelected);
+
+  return () => {
+    window.removeEventListener("productSelected", handleProductSelected);
+  };
+}, []);
+ const handleHighlightClick = (product) => {
+  setSelectedProductId(product.id);
+  router.push(`/product/${product.slug}`, { scroll: false });
+
+  const el = document.getElementById(`product-${product.id}`);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
+
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -200,11 +171,12 @@ useEffect(() => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
   useEffect(() => {
-    const handleCloseProduct = () => {
-      setSelectedShoe(null);
-      setActiveSlides([]);
-      setCurrentSlide(0);
-    };
+  const handleCloseProduct = () => {
+  setSelectedShoe(null);
+  setActiveSlides(Slide[0].images);
+  setCurrentSlide(0);
+};
+
 
     window.addEventListener("closeProductDetails", handleCloseProduct);
 
@@ -214,26 +186,34 @@ useEffect(() => {
   }, []);
 
   const isStoriesPage = pathname.startsWith("/Stories");
-  useEffect(() => {
-    const lowerPath = pathname.toLowerCase();
-    const isMobile = window.innerWidth < 1024;
-    if (lowerPath === "/stories" && isMobile) {
-      setSelectedStory(null);
-      return;
-    }
-    if (lowerPath === "/stories" && !isMobile) {
-      setSelectedStory(stories[0] || null);
-      return;
-    }
-    if (lowerPath.startsWith("/stories/")) {
-      const slug = pathname.split("/")[2];
-      const story = stories.find((s) => s.slug === slug);
-      setSelectedStory(story || null);
-      return;
-    }
+ useEffect(() => {
+  if (pathname.startsWith("/product/")) {
+    return; 
+  }
 
+  const lowerPath = pathname.toLowerCase();
+  const isMobile = window.innerWidth < 1024;
+
+  if (lowerPath === "/stories" && isMobile) {
     setSelectedStory(null);
-  }, [pathname]);
+    return;
+  }
+
+  if (lowerPath === "/stories" && !isMobile) {
+    setSelectedStory(stories[0] || null);
+    return;
+  }
+
+  if (lowerPath.startsWith("/stories/")) {
+    const slug = pathname.split("/")[2];
+    const story = stories.find((s) => s.slug === slug);
+    setSelectedStory(story || null);
+    return;
+  }
+
+  setSelectedStory(null);
+}, [pathname]);
+
 
   const Slide = [
     {
@@ -249,7 +229,11 @@ useEffect(() => {
     },
   ];
 
-  const slides = activeSlides.length ? activeSlides : Slide[0].images;
+  const slides =
+  activeSlides.length > 0
+    ? activeSlides.filter(Boolean)
+    : Slide[0].images.filter(Boolean);
+
 
   const prevSlide = () => {
     setIsFading(true);
@@ -268,8 +252,8 @@ useEffect(() => {
   };
 
   const handleProductClick = (product) => {
-    router.push(`/product/${product.slug}`);
-
+  router.push(`/product/${product.slug}`);
+  if (window.innerWidth >= 1024) {
     setSelectedShoe(product);
 
     const reordered = [
@@ -281,9 +265,11 @@ useEffect(() => {
     setCurrentSlide(0);
 
     window.dispatchEvent(
-      new CustomEvent("openProductDetails", { detail: product }),
+      new CustomEvent("productSelected", { detail: product })
     );
-  };
+  }
+};
+
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
   useEffect(() => {
@@ -297,21 +283,13 @@ useEffect(() => {
       }
     }
   }, [selectedStory]);
-
   useEffect(() => {
-    const handleExternalSelect = (e) => {
-      const id = e.detail;
-      const product = ShopData.find((p) => p.id === id);
-      if (product) {
-        handleProductClick(product);
-      }
-    };
 
-    window.addEventListener("productSelected", handleExternalSelect);
-    return () => {
-      window.removeEventListener("productSelected", handleExternalSelect);
-    };
-  }, []);
+  if (pathname.startsWith("/product/")) {
+    setSelectedStory(null);
+  }
+}, [pathname]);
+
   useEffect(() => {
     const handleImageChange = (e) => {
       setCurrentSlide(e.detail);
@@ -545,15 +523,18 @@ useEffect(() => {
       <HiOutlineArrowSmLeft />
     </button>
 
-    <Image
-      src={slides[currentSlide]}
-      alt={Slide[0].name}
-      width={600}
-      height={400}
-      className={`object-contain transition-all duration-300
-        ${isFading ? "opacity-0 translate-x-5" : "opacity-100 translate-x-0"}
-      `}
-    />
+   {slides[currentSlide] && (
+  <Image
+    src={slides[currentSlide]}
+    alt={Slide[0].name}
+    width={600}
+    height={400}
+    className={`object-contain transition-all duration-300
+      ${isFading ? "opacity-0 translate-x-5" : "opacity-100 translate-x-0"}
+    `}
+  />
+)}
+
 
     <button
       onClick={nextSlide}
@@ -565,20 +546,24 @@ useEffect(() => {
 
   {/* THUMBNAILS */}
   <div className="lg:hidden flex gap-2  mr-20 pb-28">
-    {slides.slice(0, 2).map((img, index) => (
-      <Image
-        key={index}
-        src={img}
-        alt="related"
-        width={130}
-        height={130}
-        onClick={() => setCurrentSlide(index)}
-        className={`
-          bg-white rounded-xl cursor-pointer
-          ${currentSlide === index ? "ring-2 ring-blue-500" : ""}
-        `}
-      />
-    ))}
+    {slides
+  .filter(Boolean)        // 🚨 removes "" and undefined
+  .slice(0, 2)
+  .map((img, index) => (
+    <Image
+      key={index}
+      src={img}
+      alt="related"
+      width={130}
+      height={130}
+      onClick={() => setCurrentSlide(index)}
+      className={`
+        bg-white rounded-xl cursor-pointer
+        ${currentSlide === index ? "ring-2 ring-blue-500" : ""}
+      `}
+    />
+))}
+
   </div>
 </div>
 

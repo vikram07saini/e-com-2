@@ -1,4 +1,6 @@
 "use client";
+import ShopData from "@/data/ShopData"; // ✅ ADD THIS
+
 import { useEffect, useState } from "react";
 import ProductDetailsSidebar from "@/components/ProductDetailsSidebar";
 import Link from "next/link";
@@ -62,12 +64,8 @@ export default function Sidebar({ children }) {
   const effectivePath = pathname === "/" ? "/home" : pathname;
   const router = useRouter();
 
-  // const handleMobileNav = (path) => {
-  //   if (window.innerWidth < 1024) {
-  //     setIsMobileMenuOpen(false);
-  //     if (path !== "/") setMobileFull(true);
-  //   }
-  // };
+
+
   const handleMobileNav = () => {
   setIsMobileMenuOpen(false);
   setMobileFull(true);
@@ -77,22 +75,36 @@ export default function Sidebar({ children }) {
   const openSidebarMobile = () => {
     if (window.innerWidth < 1024) setMobileFull(false);
   };
+  
+useEffect(() => {
+  const handleProductSelected = (e) => {
+    const product = e.detail;
+    if (!product) return;
 
-  useEffect(() => {
-    const openHandler = (e) => setSelectedProduct(e.detail);
-    const closeHandler = () => setSelectedProduct(null);
+    setSelectedProduct(product);
+  };
 
-    window.addEventListener("openProductDetails", openHandler);
-    window.addEventListener("closeProductDetails", closeHandler);
-    return () => {
-      window.removeEventListener("openProductDetails", openHandler);
-      window.removeEventListener("closeProductDetails", closeHandler);
-    };
-  }, []);
+  const closeHandler = () => setSelectedProduct(null);
+
+  window.addEventListener("productSelected", handleProductSelected);
+  window.addEventListener("closeProductDetails", closeHandler);
+
+  return () => {
+    window.removeEventListener("productSelected", handleProductSelected);
+    window.removeEventListener("closeProductDetails", closeHandler);
+  };
+}, []);
+useEffect(() => {
+  if (pathname.startsWith("/product/")) {
+    setMobileFull(false);
+    setIsMobileMenuOpen(false);
+  }
+}, [pathname]);
+
   const handleNavClick = (path) => {
-    setSelectedProduct(null); // close selected shoe
+    setSelectedProduct(null);
     window.dispatchEvent(new CustomEvent("closeProductDetails"));
-    router.push(path); // go to clicked route
+    router.push(path); 
   };
 
   useEffect(() => {
@@ -109,11 +121,13 @@ export default function Sidebar({ children }) {
     }
   }, [pathname]);
   useEffect(() => {
-  // If we are on a story detail page, mobileFull must be false
+
   if (/^\/Stories\/[^/]+$/.test(pathname)) {
     setMobileFull(false);
   }
 }, [pathname]);
+
+
 
 
   const isHome = effectivePath === "/home";
@@ -125,7 +139,9 @@ export default function Sidebar({ children }) {
   const isStoriesMobile = effectivePath === "/Stories";
 
   const isBookmarksMobile = effectivePath.startsWith("/bookmarks");
-  const isShopMobile = effectivePath === "/";
+  const isShopMobile =
+  effectivePath === "/" || effectivePath.startsWith("/product/");
+
 
   const linkClass = (path) => {
     const isActive =
@@ -314,19 +330,20 @@ export default function Sidebar({ children }) {
       </aside>
 
       {/* MOBILE FULL VIEW */}
-      {mobileFull && (
-        <main className="lg:hidden fixed inset-0 bg-gray-100 z-30 p-5 overflow-y-auto mt-8">
-          <button onClick={openSidebarMobile}>
-            <ArrowLeftIcon />
-          </button>
-{isHomeMobile && <Index />}
-{isStoriesMobile && <Stories />}
-{isBookmarksMobile && <Bookmarks />}
-{isShopMobile && children}
+     {/* MOBILE FULL VIEW */}
+{mobileFull && !pathname.startsWith("/product/") && (
+  <main className="lg:hidden fixed inset-0 bg-gray-100 z-30 p-5 overflow-y-auto mt-8">
+    <button onClick={openSidebarMobile}>
+      <ArrowLeftIcon />
+    </button>
 
+    {isHomeMobile && <Index />}
+    {isStoriesMobile && <Stories />}
+    {isBookmarksMobile && <Bookmarks />}
+    {isShopMobile && children}
+  </main>
+)}
 
-        </main>
-      )}
     </>
   );
 }
