@@ -143,7 +143,6 @@ export default function StoriesPage() {
 
   return (
     <>
-      {/* STORY LIST (visible on desktop always, hidden on mobile when story open) */}
       {!(activeStory && isMobile) && (
         <div
           style={{ height: "100%", overflowY: "auto", paddingBottom: "120px" }}
@@ -187,7 +186,6 @@ export default function StoriesPage() {
               </Link>
 
               {/* MOBILE VIEW */}
-             {/* MOBILE VIEW (OLD TYPE) */}
 <Link
                 href={`/Stories/${story.slug}`}
                 className="block md:hidden"
@@ -205,7 +203,7 @@ export default function StoriesPage() {
                   </div>
 
                   <div className="flex flex-col gap-2 w-full">
-                    <div className="flex gap-3 text-xs uppercase justify-between pr-2 text-gray-600">
+                    <div className="flex gap-3 text-xs uppercase justify-between pr-2 text-gray-600 p-2">
                       <span>{story.category}</span>
                       <span>{story.date}</span>
                     </div>
