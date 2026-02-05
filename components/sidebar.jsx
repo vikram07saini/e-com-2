@@ -271,7 +271,7 @@ export default function Sidebar({ children }) {
         className={`lg:hidden fixed top-0 left-0 w-screen h-screen bg-white z-40 transition-transform ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <nav className="flex flex-col items-center justify-center h-full gap-6">
-          <Link href="/" onClick={handleMobileNav}>
+          <Link href="/home" onClick={handleMobileNav}>
             INDEX
           </Link>
           <Link href="/Stories" onClick={handleMobileNav}>
