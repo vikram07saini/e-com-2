@@ -572,7 +572,7 @@ useEffect(() => {
 </div>
 
 
-<div className="lg:hidden mt-[60vh]">
+<div className="lg:hidden mt-[65vh]">
   {/* Date */}
   <div className="flex justify-between items-center bg-white p-4 rounded-t-2xl">
     <span className="text-sm text-gray-600">
@@ -590,7 +590,7 @@ useEffect(() => {
 
 
 
-            <h1 className="text-justify leading-relaxed pl-5 pr-5 lg:hidden bg-white ">
+            <h1 className="text-justify leading-relaxed pl-3 pr-12 lg:hidden bg-white ">
               Borrowing its nomenclature from The North Face's stalwart
               outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka is
               a winterised footwear silhouette combining comfort and protection.
@@ -611,9 +611,10 @@ useEffect(() => {
     flex
     gap-[0.4rem]
     rounded-xl
-    pl-[1.25rem]
+    pl-[1.30rem]
     flex-wrap
     mt-[-53px]
+    ml-[-1.09rem]
   "
 >
   <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
@@ -679,7 +680,7 @@ useEffect(() => {
 />
 
 </div>
-<div className="flex gap-2 pb-2 p-3 pl-6 lg:hidden">
+<div className="flex gap-2 pb-10 mb-20 p-3 pl-6 lg:hidden">
             {similarProducts.map((item) => (
               <Image
                 key={item.id}
