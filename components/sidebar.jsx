@@ -307,7 +307,7 @@ export default function Sidebar({ children }) {
           >
             STORIES
           </Link>
-          <Link href="/" onClick={() => handleMobileNav("shop")}>
+          <Link href="/" onClick={() => handleMobileNav("/")}>
             SHOP
           </Link>
           <Link href="/bookmarks" onClick={handleMobileNav}>
