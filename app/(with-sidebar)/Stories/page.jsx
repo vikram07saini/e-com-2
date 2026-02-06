@@ -146,7 +146,7 @@ export default function StoriesPage() {
       {!(activeStory && isMobile) && (
         <div
           style={{ height: "100%", overflowY: "auto", paddingBottom: "120px" }}
-          className="p-3"
+          className="lg:p-3 lg:w-[350px] pt-3"
         >
           {stories.map((story) => (
             <div
@@ -173,7 +173,7 @@ export default function StoriesPage() {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-2 w-full p-2">
+                  <div className="flex flex-col gap-2 w-full p-3 mr-8">
                     <div className="flex flex-col sm:flex-row sm:gap-4 text-xs uppercase lg:justify-between">
                       <span>{story.category}</span>
                       <span className="mt-1 sm:mt-0">{story.date}</span>
@@ -191,8 +191,8 @@ export default function StoriesPage() {
                 className="block md:hidden"
                 onClick={() => window.scrollTo(0, 0)}
               >
-                <div className="flex flex-row mb-2  gap-4 h-[150px] items-start  bg-white hover:bg-[#EDEDED] transition rounded-lg lg:hidden">
-                  <div className="w-[220px] h-[150px] lg:flex-shrink-0">
+                <div className="flex flex-row mb-2 w-full  gap-4 h-[150px] items-start  bg-white hover:bg-[#EDEDED] transition rounded-lg lg:hidden">
+                  <div className="w-[230px] h-[150px] lg:flex-shrink-0">
                     <Image
                       src={story.image}
                       alt={story.title}
