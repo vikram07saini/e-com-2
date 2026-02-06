@@ -88,8 +88,8 @@ const Page = () => {
           </div>
 
           <div className="pt-[5px] mt-6 p-3 pb-25">
-            <p className="text-center md:text-left ml-2">SIMILAR PRODUCTS</p>
-           <div className="flex flex-wrap justify-center md:justify-start gap-7">
+            {/* <p className="text-center md:text-left ml-2">SIMILAR PRODUCTS</p> */}
+           {/* <div className="flex flex-wrap justify-center md:justify-start gap-7">
   {bookmark.slice(0, 2).map((item) => {
     const product = ShopData.find((p) => p.id === item.id);
 
@@ -107,7 +107,7 @@ const Page = () => {
       />
     );
   })}
-</div>
+</div> */}
 
           </div>
         </div>
@@ -137,7 +137,7 @@ const Page = () => {
   ))}
 </div>
 
-      <div className="block md:hidden w-full bg-white flex justify-around items-center gap-3 fixed bottom-0 left-0 z-20 p-7 shadow-sm">
+      <div className="block md:hidden w-full lg:bg-white flex justify-around items-center gap-3 fixed bottom-0 left-0 z-20 p-7 shadow-sm">
         <label className="text-sm font-medium">Find</label>
         <button>-</button>
         <button>+</button>

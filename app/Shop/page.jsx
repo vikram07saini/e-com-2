@@ -33,6 +33,12 @@ export default function Page() {
   const [gridCols, setGridCols] = useState(2);
    const tagRef = useRef(null);
    const [showDiv, setShowDiv] = useState(false);
+   const similarProducts = selectedShoe
+  ? ShopData.filter(
+      (item) => item.id !== selectedShoe.id
+    ).slice(0, 2)
+  : [];
+
    
    const openPDP = (product) => {
   router.push(`/product/${product.slug}`, { scroll: false });
@@ -496,8 +502,6 @@ useEffect(() => {
        {selectedShoe && (
   <div className="max-w-5xl mx-auto lg:block">
 
-           
-           {/* FIXED IMAGE + THUMBNAILS – MOBILE */}
 <div
   className="
     lg:static
@@ -547,7 +551,7 @@ useEffect(() => {
   {/* THUMBNAILS */}
   <div className="lg:hidden flex gap-2  mr-20 pb-28">
     {slides
-  .filter(Boolean)        // 🚨 removes "" and undefined
+  .filter(Boolean)    
   .slice(0, 2)
   .map((img, index) => (
     <Image
@@ -570,14 +574,14 @@ useEffect(() => {
 
 <div className="lg:hidden mt-[60vh]">
   {/* Date */}
-  <div className="flex justify-between items-center bg-white p-3 rounded-t-2xl">
+  <div className="flex justify-between items-center bg-white p-4 rounded-t-2xl">
     <span className="text-sm text-gray-600">
       20th April 2025
     </span>
     <FaRegBookmark className="text-3xl" />
   </div>
 
-  <div className="bg-white">
+  <div className="bg-white p-1 mt-[-20px]">
     <p className="text-2xl font-bold flex-1 mx-3 truncate">
       {selectedShoe.name}
     </p>
@@ -586,7 +590,7 @@ useEffect(() => {
 
 
 
-            <h1 className="text-justify leading-relaxed p-5 lg:hidden bg-white ">
+            <h1 className="text-justify leading-relaxed pl-5 pr-5 lg:hidden bg-white ">
               Borrowing its nomenclature from The North Face's stalwart
               outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka is
               a winterised footwear silhouette combining comfort and protection.
@@ -609,6 +613,7 @@ useEffect(() => {
     rounded-xl
     pl-[1.25rem]
     flex-wrap
+    mt-[-53px]
   "
 >
   <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
@@ -642,28 +647,67 @@ useEffect(() => {
             </div>
            
             <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
-   <div className="flex gap-5 ">
-  {ShopData
-    .filter((item) => item.id !== selectedShoe?.id) 
-    .slice(0, 2) 
-    .map((item) => (
-      <Image
-        key={item.id}
-        src={item.img}
-        alt={item.name}
-        width={150}
-        height={150}
-        onClick={() => handleProductClick(item)} 
-        className="object-contain cursor-pointer  rounded-2xl lg:bg-white  "
-      />
-    ))}
+  <div className=" hidden lg:flex lg:gap-5">
+  <Image
+  src="/ShoesGallery/16.png"
+  alt="Shoe 1"
+  width={150}
+  height={150}
+  onClick={() => {
+    setActiveSlides((prev) => [
+      "/ShoesGallery/16.png",
+      ...prev.filter((img) => img !== "/ShoesGallery/16.png"),
+    ]);
+    setCurrentSlide(0);
+  }}
+  className="object-contain cursor-pointer rounded-2xl lg:bg-white"
+/>
+
+<Image
+  src="/ShoesGallery/12.png"
+  alt="Shoe 2"
+  width={150}
+  height={150}
+  onClick={() => {
+    setActiveSlides((prev) => [
+      "/ShoesGallery/12.png",
+      ...prev.filter((img) => img !== "/ShoesGallery/12.png"),
+    ]);
+    setCurrentSlide(0);
+  }}
+  className="object-contain cursor-pointer rounded-2xl lg:bg-white"
+/>
+
 </div>
+<div className="flex gap-2 pb-2 p-3 pl-6 lg:hidden">
+            {similarProducts.map((item) => (
+              <Image
+                key={item.id}
+                src={item.img}
+                alt={item.name}
+                width={150}
+                height={150}
+                className="cursor-pointer bg-gray-100 rounded-xl hover:scale-105 transition"
+              onClick={() => {
+  router.push(`/product/${item.slug}`);
+  window.dispatchEvent(
+    new CustomEvent("openProductDetails", { detail: item })
+  );
+  window.dispatchEvent(
+    new CustomEvent("changeBigImage", { detail: item.img })
+  );
+}}
+
+              />
+            ))}
+          </div>
+
 
 
             </div>
             </div>
            
-            <div className="p-5 rounded-xl">
+            <div className="p-8 rounded-xl">
               <div
                 className="
     lg:hidden
@@ -676,8 +720,9 @@ useEffect(() => {
     justify-between
     items-center
     p-4
+    m-3
     bg-white
-    rounded-t-2xl
+    rounded-2xl
     shadow-md
   "
               >
@@ -686,7 +731,7 @@ useEffect(() => {
               </div>
             </div>
             {/* ************************************************* */}
-            <div className=" p-7">
+            <div className=" hidden lg:p-7">
               <h1 className="text-justify hidden leading-relaxed lg:pb-30">
                 Borrowing its nomenclature from The North Face's stalwart
                 outerwear style, the Nuptse Jacket, the Nuptse Traction Chukka

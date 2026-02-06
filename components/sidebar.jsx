@@ -12,7 +12,6 @@ import Stories from "@/app/(with-sidebar)/Stories/page.jsx";
 import Bookmarks from "@/app/(with-sidebar)/bookmarks/page.jsx";
 import SHOP from "@/app/Shop/page.jsx";
 
-
 const MenuIcon = () => (
   <svg
     width="24"
@@ -64,47 +63,44 @@ export default function Sidebar({ children }) {
   const effectivePath = pathname === "/" ? "/home" : pathname;
   const router = useRouter();
 
-
-
   const handleMobileNav = () => {
-  setIsMobileMenuOpen(false);
-  setMobileFull(true);
-};
-
+    setIsMobileMenuOpen(false);
+    setMobileFull(true);
+  };
 
   const openSidebarMobile = () => {
     if (window.innerWidth < 1024) setMobileFull(false);
   };
-  
-useEffect(() => {
-  const handleProductSelected = (e) => {
-    const product = e.detail;
-    if (!product) return;
 
-    setSelectedProduct(product);
-  };
+  useEffect(() => {
+    const handleProductSelected = (e) => {
+      const product = e.detail;
+      if (!product) return;
 
-  const closeHandler = () => setSelectedProduct(null);
+      setSelectedProduct(product);
+    };
 
-  window.addEventListener("productSelected", handleProductSelected);
-  window.addEventListener("closeProductDetails", closeHandler);
+    const closeHandler = () => setSelectedProduct(null);
 
-  return () => {
-    window.removeEventListener("productSelected", handleProductSelected);
-    window.removeEventListener("closeProductDetails", closeHandler);
-  };
-}, []);
-useEffect(() => {
-  if (pathname.startsWith("/product/")) {
-    setMobileFull(false);
-    setIsMobileMenuOpen(false);
-  }
-}, [pathname]);
+    window.addEventListener("productSelected", handleProductSelected);
+    window.addEventListener("closeProductDetails", closeHandler);
+
+    return () => {
+      window.removeEventListener("productSelected", handleProductSelected);
+      window.removeEventListener("closeProductDetails", closeHandler);
+    };
+  }, []);
+  useEffect(() => {
+    if (pathname.startsWith("/product/")) {
+      setMobileFull(false);
+      setIsMobileMenuOpen(false);
+    }
+  }, [pathname]);
 
   const handleNavClick = (path) => {
     setSelectedProduct(null);
     window.dispatchEvent(new CustomEvent("closeProductDetails"));
-    router.push(path); 
+    router.push(path);
   };
 
   useEffect(() => {
@@ -121,14 +117,10 @@ useEffect(() => {
     }
   }, [pathname]);
   useEffect(() => {
-
-  if (/^\/Stories\/[^/]+$/.test(pathname)) {
-    setMobileFull(false);
-  }
-}, [pathname]);
-
-
-
+    if (/^\/Stories\/[^/]+$/.test(pathname)) {
+      setMobileFull(false);
+    }
+  }, [pathname]);
 
   const isHome = effectivePath === "/home";
   const isStories = effectivePath === "/Stories";
@@ -140,8 +132,7 @@ useEffect(() => {
 
   const isBookmarksMobile = effectivePath.startsWith("/bookmarks");
   const isShopMobile =
-  effectivePath === "/" || effectivePath.startsWith("/product/");
-
+    effectivePath === "/" || effectivePath.startsWith("/product/");
 
   const linkClass = (path) => {
     const isActive =
@@ -246,19 +237,18 @@ useEffect(() => {
                 />
               ) : (
                 <>
-                 {isHome && <Index />}
+                  {isHome && <Index />}
 
-{(isStories || isStoryDetail) && <Stories />}
+                  {(isStories || isStoryDetail) && <Stories />}
 
-{isBookmarks && <Bookmarks />}
-
+                  {isBookmarks && <Bookmarks />}
                 </>
               )}
             </div>
           </div>
 
           {/* FIND INPUT */}
-          <div className="fixed bottom-4 left-0 lg:left-[30px] bg-white p-4 z-50 flex items-center gap-5 px-5 lg:w-[350px] shadow-[0_-10px_10px_rgba(255,255,255,0.9)]">
+          <div className="fixed bottom-4 left-0 lg:left-[25px] bg-white p-4 z-50 flex items-center gap-5 px-5 lg:w-[350px] shadow-[0_-10px_10px_rgba(255,255,255,0.9)]">
             <label className="text-sm font-medium">FIND</label>
             <input
               className="bg-gray-100 text-xs w-[90%] p-2 rounded-lg"
@@ -308,18 +298,15 @@ useEffect(() => {
           <Link href="/home" onClick={handleMobileNav}>
             INDEX
           </Link>
-<Link
-  href="/Stories"
-  onClick={() => {
-    setIsMobileMenuOpen(false);
-    setMobileFull(true);
-  }}
->
-  STORIES
-</Link>
-
-
-
+          <Link      
+            href="/Stories"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              setMobileFull(true);
+            }}
+          >
+            STORIES
+          </Link>
           <Link href="/" onClick={() => handleMobileNav("shop")}>
             SHOP
           </Link>
@@ -328,22 +315,18 @@ useEffect(() => {
           </Link>
         </nav>
       </aside>
-
       {/* MOBILE FULL VIEW */}
-     {/* MOBILE FULL VIEW */}
-{mobileFull && !pathname.startsWith("/product/") && (
-  <main className="lg:hidden fixed inset-0 bg-gray-100 z-30 p-5 overflow-y-auto mt-8">
-    <button onClick={openSidebarMobile}>
-      <ArrowLeftIcon />
-    </button>
-
-    {isHomeMobile && <Index />}
-    {isStoriesMobile && <Stories />}
-    {isBookmarksMobile && <Bookmarks />}
-    {isShopMobile && children}
-  </main>
-)}
-
+      {mobileFull && !pathname.startsWith("/product/") && (
+        <main className="lg:hidden fixed inset-0 bg-gray-100 z-30 p-3 overflow-y-auto mt-8">
+          <button onClick={openSidebarMobile}>
+            <ArrowLeftIcon />
+          </button>
+          {isHomeMobile && <Index />}
+          {isStoriesMobile && <Stories />}
+          {isBookmarksMobile && <Bookmarks />}
+          {isShopMobile && children}
+        </main>
+      )}
     </>
   );
 }
