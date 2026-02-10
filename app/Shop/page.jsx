@@ -603,7 +603,7 @@ export default function Page() {
 
               <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
                 <div className=" hidden lg:flex lg:gap-5">
-    {slides.slice(2,4  ).map((img, index) => (
+    {slides.slice(1, 3).map((img, index) => (
   <Image
     key={index}
     src={img}
