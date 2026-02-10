@@ -31,31 +31,27 @@ export default function Page() {
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const [gridCols, setGridCols] = useState(2);
-   const tagRef = useRef(null);
-   const [showDiv, setShowDiv] = useState(false);
-   const similarProducts = selectedShoe
-  ? ShopData.filter(
-      (item) => item.id !== selectedShoe.id
-    ).slice(0, 2)
-  : [];
+  const tagRef = useRef(null);
+  const [showDiv, setShowDiv] = useState(false);
+  const similarProducts = selectedShoe
+    ? ShopData.filter((item) => item.id !== selectedShoe.id).slice(0, 2)
+    : [];
 
-   
-   const openPDP = (product) => {
-  router.push(`/product/${product.slug}`, { scroll: false });
-};
+  const openPDP = (product) => {
+    router.push(`/product/${product.slug}`, { scroll: false });
+  };
 
-   const openProduct = (product) => {
-  setSelectedShoe(product);
+  const openProduct = (product) => {
+    setSelectedShoe(product);
 
-  const reordered = [
-    product.img,
-    ...Slide[0].images.filter((img) => img !== product.img),
-  ];
+    const reordered = [
+      product.img,
+      ...Slide[0].images.filter((img) => img !== product.img),
+    ];
 
-  setActiveSlides(reordered);
-  setCurrentSlide(0);
-};
-
+    setActiveSlides(reordered);
+    setCurrentSlide(0);
+  };
 
   useEffect(() => {
     const updateGridByScreen = () => {
@@ -71,104 +67,99 @@ export default function Page() {
 
     return () => window.removeEventListener("resize", updateGridByScreen);
   }, []);
-useEffect(() => {
-  if (!selectedShoe) return;
+  useEffect(() => {
+    if (!selectedShoe) return;
 
-  const scrollEl = document.getElementById("main-scroll") || window;
+    const scrollEl = document.getElementById("main-scroll") || window;
 
-  const getScrollTop = () =>
-    scrollEl === window ? window.scrollY : scrollEl.scrollTop;
-})
+    const getScrollTop = () =>
+      scrollEl === window ? window.scrollY : scrollEl.scrollTop;
+  });
 
-useEffect(() => {
-  if (!selectedShoe) return;
+  useEffect(() => {
+    if (!selectedShoe) return;
 
-  const main = document.getElementById("main-scroll");
+    const main = document.getElementById("main-scroll");
 
-  if (main) {
-    main.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  } else {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-}, [selectedShoe?.id]);
+    if (main) {
+      main.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [selectedShoe?.id]);
 
   const sortedShopData = [...ShopData].sort((a, b) =>
     sortOrder === "asc" ? a.id - b.id : b.id - a.id,
   );
 
   const zoomIn = () => {
-  setGridCols((prev) => {
-    const isMobile = window.innerWidth < 1024;
+    setGridCols((prev) => {
+      const isMobile = window.innerWidth < 1024;
 
-    if (isMobile) {
-     
-      return prev > 2 ? prev - 1 : 2;
-    } else {
-      return prev > 1 ? prev - 1 : 1;
+      if (isMobile) {
+        return prev > 2 ? prev - 1 : 2;
+      } else {
+        return prev > 1 ? prev - 1 : 1;
+      }
+    });
+  };
+
+  const zoomOut = () => {
+    setGridCols((prev) => {
+      const isMobile = window.innerWidth < 1024;
+      const maxCols = isMobile ? 3 : 6;
+
+      return prev < maxCols ? prev + 1 : maxCols;
+    });
+  };
+  useEffect(() => {
+    if (!pathname.startsWith("/product/")) return;
+
+    const slug = pathname.split("/")[2];
+    const product = ShopData.find((p) => p.slug === slug);
+
+    if (product) {
+      openProduct(product);
     }
-  });
-};
+  }, [pathname]);
 
- const zoomOut = () => {
-  setGridCols((prev) => {
-    const isMobile = window.innerWidth < 1024;
-    const maxCols = isMobile ? 3 : 6;
+  useEffect(() => {
+    const handleProductSelected = (e) => {
+      const product = e.detail;
+      if (!product) return;
 
-    return prev < maxCols ? prev + 1 : maxCols;
-  });
-};
-useEffect(() => {
-  if (!pathname.startsWith("/product/")) return;
+      setSelectedShoe(product);
 
-  const slug = pathname.split("/")[2];
-  const product = ShopData.find((p) => p.slug === slug);
+      const reordered = [
+        product.img,
+        ...Slide[0].images.filter((img) => img !== product.img),
+      ];
 
-  if (product) {
-    openProduct(product); 
-  }
-}, [pathname]);
+      setActiveSlides(reordered);
+      setCurrentSlide(0);
+    };
 
+    window.addEventListener("productSelected", handleProductSelected);
 
+    return () => {
+      window.removeEventListener("productSelected", handleProductSelected);
+    };
+  }, []);
+  const handleHighlightClick = (product) => {
+    setSelectedProductId(product.id);
+    router.push(`/product/${product.slug}`, { scroll: false });
 
-
-useEffect(() => {
-  const handleProductSelected = (e) => {
-    const product = e.detail;
-    if (!product) return;
-
-    setSelectedShoe(product);
-
-    const reordered = [
-      product.img,
-      ...Slide[0].images.filter((img) => img !== product.img),
-    ];
-
-    setActiveSlides(reordered);
-    setCurrentSlide(0);
+    const el = document.getElementById(`product-${product.id}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   };
-
-  window.addEventListener("productSelected", handleProductSelected);
-
-  return () => {
-    window.removeEventListener("productSelected", handleProductSelected);
-  };
-}, []);
- const handleHighlightClick = (product) => {
-  setSelectedProductId(product.id);
-  router.push(`/product/${product.slug}`, { scroll: false });
-
-  const el = document.getElementById(`product-${product.id}`);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-};
-
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -177,12 +168,11 @@ useEffect(() => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
   useEffect(() => {
-  const handleCloseProduct = () => {
-  setSelectedShoe(null);
-  setActiveSlides(Slide[0].images);
-  setCurrentSlide(0);
-};
-
+    const handleCloseProduct = () => {
+      setSelectedShoe(null);
+      setActiveSlides(Slide[0].images);
+      setCurrentSlide(0);
+    };
 
     window.addEventListener("closeProductDetails", handleCloseProduct);
 
@@ -192,34 +182,33 @@ useEffect(() => {
   }, []);
 
   const isStoriesPage = pathname.startsWith("/Stories");
- useEffect(() => {
-  if (pathname.startsWith("/product/")) {
-    return; 
-  }
+  useEffect(() => {
+    if (pathname.startsWith("/product/")) {
+      return;
+    }
 
-  const lowerPath = pathname.toLowerCase();
-  const isMobile = window.innerWidth < 1024;
+    const lowerPath = pathname.toLowerCase();
+    const isMobile = window.innerWidth < 1024;
 
-  if (lowerPath === "/stories" && isMobile) {
+    if (lowerPath === "/stories" && isMobile) {
+      setSelectedStory(null);
+      return;
+    }
+
+    if (lowerPath === "/stories" && !isMobile) {
+      setSelectedStory(stories[0] || null);
+      return;
+    }
+
+    if (lowerPath.startsWith("/stories/")) {
+      const slug = pathname.split("/")[2];
+      const story = stories.find((s) => s.slug === slug);
+      setSelectedStory(story || null);
+      return;
+    }
+
     setSelectedStory(null);
-    return;
-  }
-
-  if (lowerPath === "/stories" && !isMobile) {
-    setSelectedStory(stories[0] || null);
-    return;
-  }
-
-  if (lowerPath.startsWith("/stories/")) {
-    const slug = pathname.split("/")[2];
-    const story = stories.find((s) => s.slug === slug);
-    setSelectedStory(story || null);
-    return;
-  }
-
-  setSelectedStory(null);
-}, [pathname]);
-
+  }, [pathname]);
 
   const Slide = [
     {
@@ -236,10 +225,9 @@ useEffect(() => {
   ];
 
   const slides =
-  activeSlides.length > 0
-    ? activeSlides.filter(Boolean)
-    : Slide[0].images.filter(Boolean);
-
+    activeSlides.length > 0
+      ? activeSlides.filter(Boolean)
+      : Slide[0].images.filter(Boolean);
 
   const prevSlide = () => {
     setIsFading(true);
@@ -258,24 +246,23 @@ useEffect(() => {
   };
 
   const handleProductClick = (product) => {
-  router.push(`/product/${product.slug}`);
-  if (window.innerWidth >= 1024) {
-    setSelectedShoe(product);
+    router.push(`/product/${product.slug}`);
+    if (window.innerWidth >= 1024) {
+      setSelectedShoe(product);
 
-    const reordered = [
-      product.img,
-      ...Slide[0].images.filter((img) => img !== product.img),
-    ];
+      const reordered = [
+        product.img,
+        ...Slide[0].images.filter((img) => img !== product.img),
+      ];
 
-    setActiveSlides(reordered);
-    setCurrentSlide(0);
+      setActiveSlides(reordered);
+      setCurrentSlide(0);
 
-    window.dispatchEvent(
-      new CustomEvent("productSelected", { detail: product })
-    );
-  }
-};
-
+      window.dispatchEvent(
+        new CustomEvent("productSelected", { detail: product }),
+      );
+    }
+  };
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
   useEffect(() => {
@@ -290,11 +277,10 @@ useEffect(() => {
     }
   }, [selectedStory]);
   useEffect(() => {
-
-  if (pathname.startsWith("/product/")) {
-    setSelectedStory(null);
-  }
-}, [pathname]);
+    if (pathname.startsWith("/product/")) {
+      setSelectedStory(null);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const handleImageChange = (e) => {
@@ -333,41 +319,41 @@ useEffect(() => {
             ref={storyContentRef}
             className="max-w-5xl mx-auto pt-10 mb-10 bg-white rounded-2xl "
           >
-       <div className="relative flex justify-center bg-white rounded-2xl mb-6">
-  <Image
-    src={
-      selectedStory.slug === stories[0].slug
-        ? story4
-        : selectedStory.image
-    }
-    alt={selectedStory.title}
-    width={1200}
-    height={600}
-    className="w-full h-120 object-cover rounded-xl mt-11"
-  />
+            <div className="relative flex justify-center bg-white rounded-2xl mb-6">
+              <Image
+                src={
+                  selectedStory.slug === stories[0].slug
+                    ? story4
+                    : selectedStory.image
+                }
+                alt={selectedStory.title}
+                width={1200}
+                height={600}
+                className="w-full h-120 object-cover rounded-xl mt-11"
+              />
 
-  <div className="lg:absolute lg:top-[74%] lg:left-[3%] lg:-translate-y-1/6 lg:p-3 absolute top-[75%] left-[1%] -translate-y-1/4 p-2">
-    <h1 className="text-xs text-white">New Release</h1>
-    <h1 className="lg:text-3xl text-lg text-white">
-      The North Face Nuptse <br />
-      Traction Chukka
-    </h1>
-    <h1 className="text-sm text-white">
-      A conversation with Ghostly International founder Sam
-      <br /> Valenti IV on the occasion of his new coffee table book.
-    </h1>
-  </div>
-</div>
-
+              <div className="lg:absolute lg:top-[74%] lg:left-[3%] lg:-translate-y-1/6 lg:p-3 absolute top-[75%] left-[1%] -translate-y-1/4 p-2">
+                <h1 className="text-xs text-white">New Release</h1>
+                <h1 className="lg:text-3xl text-lg text-white">
+                  The North Face Nuptse <br />
+                  Traction Chukka
+                </h1>
+                <h1 className="text-sm text-white">
+                  A conversation with Ghostly International founder Sam
+                  <br /> Valenti IV on the occasion of his new coffee table
+                  book.
+                </h1>
+              </div>
+            </div>
 
             <div className="transition-all duration-200 ">
               <div className="flex justify-between pl-2 pr-2 pb-4 lg:hidden">
                 <h1 className="text-sm">spotlight:</h1>
                 <h1 className="text-sm">{selectedStory.date}</h1>
               </div>
-             <div className="w-full lg:max-w-4xl  px-4 break-words leading-relaxed">
-  {selectedStory.content}
-</div>
+              <div className="w-full lg:max-w-4xl  px-4 break-words leading-relaxed">
+                {selectedStory.content}
+              </div>
 
               <div className="mt-6 max-w-md mx-auto text-justify leading-relaxed pb-20">
                 <p className="p-3">
@@ -435,75 +421,69 @@ useEffect(() => {
             >
               {sortedShopData.map((item) => {
                 const isSelected = selectedProductId === item.id;
-
                 return (
-    <div
-  key={item.id}
-  id={`product-${item.id}`}
-  onClick={() => handleProductClick(item)}
-  onDoubleClick={() => handleHighlightClick(item)}
-  className={`
+                  <div
+                    key={item.id}
+                    id={`product-${item.id}`}
+                    onClick={() => handleProductClick(item)}
+                    onDoubleClick={() => handleHighlightClick(item)}
+                    className={`
     relative bg-gray-100 p-1 sm:p-3 cursor-pointer
     transition-all duration-300 ease-in-out
     group-hover:opacity-40 group-hover:bg-white/60
     hover:opacity-100 hover:bg-gray-100 hover:scale-105
     m-1 sm:m-3 
   `}
->
-  {/* ID TAG */}
-  <span
-    className="
+                  >
+                    {/* ID TAG */}
+                    <span
+                      className="
       absolute top-1 left-1 sm:top-2 sm:left-2
       text-[10px] sm:text-xs
       text-black 
       px-1 sm:px-2 py-[1px] sm:py-1
       rounded
     "
-  >
-    {item.id}
-  </span>
-
-  {/* SALE TAG */}
-  {item.sale && (
-    <span
-      className="
+                    >
+                      {item.id}
+                    </span>
+                    {/* SALE TAG */}
+                    {item.sale && (
+                      <span
+                        className="
         absolute top-1 right-1 sm:top-2 sm:right-2
         text-[10px] sm:text-xs
         bg-red-600 text-white
         px-1 sm:px-2 py-[1px] sm:py-1
         rounded
       "
-    >
-      {item.sale}
-    </span>
-  )}
-
-  <Image
-    src={item.img}
-    alt={item.name}
-    width={600}
-    height={600}
-    className="
+                      >
+                        {item.sale}
+                      </span>
+                    )}
+                    <Image
+                      src={item.img}
+                      alt={item.name}
+                      width={600}
+                      height={600}
+                      className="
       object-contain
       w-full
       aspect-square
       mx-auto
       scale-125 sm:scale-100
     "
-  />
-</div>
-
-
+                    />
+                  </div>
                 );
               })}
             </div>
           </div>
         )}
-       {selectedShoe && (
-  <div className="max-w-5xl mx-auto lg:block">
-
-<div
-  className="
+        {selectedShoe && (
+          <div className="max-w-5xl mx-auto lg:block">
+            <div
+              className="
     lg:static
     fixed
     top-[80px]
@@ -517,78 +497,78 @@ useEffect(() => {
     justify-center
     items-center
   "
->
-  {/* BIG IMAGE */}
-  <div className="relative w-full flex-1 flex justify-center items-center">
-    <button
-      onClick={prevSlide}
-      className="absolute left-2 text-3xl z-30"
-    >
-      <HiOutlineArrowSmLeft />
-    </button>
-
-   {slides[currentSlide] && (
-  <Image
-    src={slides[currentSlide]}
-    alt={Slide[0].name}
-    width={600}
-    height={400}
-    className={`object-contain transition-all duration-300
+            >
+              {/* BIG IMAGE */}
+              <div className="relative w-full flex-1 flex justify-center items-center">
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-2 text-3xl z-30"
+                >
+                  <HiOutlineArrowSmLeft />
+                </button>
+                {slides[currentSlide] && (
+                  <Image
+                    src={slides[currentSlide]}
+                    alt={Slide[0].name}
+                    width={600}
+                    height={400}
+                    className={`object-contain transition-all duration-300
       ${isFading ? "opacity-0 translate-x-5" : "opacity-100 translate-x-0"}
     `}
-  />
-)}
+                  />
+                )}
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-2 text-3xl z-30"
+                >
+                  <HiOutlineArrowSmRight />
+                </button>
+              </div>
+              {/* THUMBNAILS */}
+              <div className="lg:hidden flex gap-2  mr-20 pb-28">
+                {slides
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .map((img, index) => (
+                    <Image
+                      key={index}
+                      src={img}
+                      alt="related"
+                      width={130}
+                      height={130}
+                    onClick={() => {
+  const clickedImg = img;
 
+  setActiveSlides((prev) => [
+    clickedImg,
+    ...prev.filter((i) => i !== clickedImg),
+  ]);
 
-    <button
-      onClick={nextSlide}
-      className="absolute right-2 text-3xl z-30"
-    >
-      <HiOutlineArrowSmRight />
-    </button>
-  </div>
+  setCurrentSlide(0);
+}}
 
-  {/* THUMBNAILS */}
-  <div className="lg:hidden flex gap-2  mr-20 pb-28">
-    {slides
-  .filter(Boolean)    
-  .slice(0, 2)
-  .map((img, index) => (
-    <Image
-      key={index}
-      src={img}
-      alt="related"
-      width={130}
-      height={130}
-      onClick={() => setCurrentSlide(index)}
-      className={`
+                      className={`
         bg-white rounded-xl cursor-pointer
         ${currentSlide === index ? "ring-2 ring-blue-500" : ""}
       `}
-    />
-))}
+                    />
+                  ))}
+              </div>
+            </div>
 
-  </div>
-</div>
+            <div className="lg:hidden mt-[65vh]">
+              {/* Date */}
+              <div className="flex justify-between items-center bg-white p-4 rounded-t-2xl">
+                <span className="text-sm text-gray-600">20th April 2025</span>
+                <FaRegBookmark className="text-3xl" />
+              </div>
 
-
-<div className="lg:hidden mt-[65vh]">
-  {/* Date */}
-  <div className="flex justify-between items-center bg-white p-4 rounded-t-2xl">
-    <span className="text-sm text-gray-600">
-      20th April 2025
-    </span>
-    <FaRegBookmark className="text-3xl" />
-  </div>
-
-  <div className="bg-white p-1 mt-[-20px]">
-    <p className="text-2xl font-bold flex-1 mx-3 truncate">
-      {selectedShoe.name}
-    </p>
-  </div>
-</div>
-
-
+              <div className="bg-white p-1 mt-[-20px]">
+                <p className="text-2xl font-bold flex-1 mx-3 truncate">
+                  {selectedShoe.name}
+                </p>
+              </div>
+            </div>
 
             <h1 className="text-justify leading-relaxed pl-3 pr-12 lg:hidden bg-white ">
               Borrowing its nomenclature from The North Face's stalwart
@@ -604,9 +584,9 @@ useEffect(() => {
               Yellow colours are mainstays in The North Face footwear, while a
               Real Tree camo option is a nod to hunting and outdoor wear.
             </h1>
-<div
-  ref={tagRef}
-  className="
+            <div
+              ref={tagRef}
+              className="
     lg:hidden
     flex
     gap-[0.4rem]
@@ -616,98 +596,81 @@ useEffect(() => {
     mt-[-53px]
     ml-[-1.09rem]
   "
->
-  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
-    The North Face
-  </h1>
+            >
+              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+                The North Face
+              </h1>
 
-  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
-    Nov 2025
-  </h1>
+              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+                Nov 2025
+              </h1>
 
-  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
-    Camouflage
-  </h1>
+              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+                Camouflage
+              </h1>
 
-  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
-    High
-  </h1>
+              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+                High
+              </h1>
 
-  <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
-    Slip On
-  </h1>
-</div>
-
-
-
-
-
-             <div className="bg-white rounded-b-2xl">
-            <div className="mt-8 pl-8 lg:hidden bg-white ">
-              <h1 className="pt-5">SIMILAR PRODUCTS</h1>
+              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+                Slip On
+              </h1>
             </div>
-           
-            <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
-  <div className=" hidden lg:flex lg:gap-5">
-  <Image
-  src="/ShoesGallery/16.png"
-  alt="Shoe 1"
-  width={150}
-  height={150}
-  onClick={() => {
-    setActiveSlides((prev) => [
-      "/ShoesGallery/16.png",
-      ...prev.filter((img) => img !== "/ShoesGallery/16.png"),
-    ]);
-    setCurrentSlide(0);
-  }}
-  className="object-contain cursor-pointer rounded-2xl lg:bg-white"
-/>
+            <div className="bg-white rounded-b-2xl">
+              <div className="mt-8 pl-8 lg:hidden bg-white ">
+                <h1 className="pt-5">SIMILAR PRODUCTS</h1>
+              </div>
 
-<Image
-  src="/ShoesGallery/12.png"
-  alt="Shoe 2"
-  width={150}
-  height={150}
-  onClick={() => {
-    setActiveSlides((prev) => [
-      "/ShoesGallery/12.png",
-      ...prev.filter((img) => img !== "/ShoesGallery/12.png"),
-    ]);
-    setCurrentSlide(0);
-  }}
-  className="object-contain cursor-pointer rounded-2xl lg:bg-white"
-/>
-
-</div>
-<div className="flex gap-2 pb-10 mb-20 p-3 pl-6 lg:hidden">
-            {similarProducts.map((item) => (
-              <Image
-                key={item.id}
-                src={item.img}
-                alt={item.name}
-                width={150}
-                height={150}
-                className="cursor-pointer bg-gray-100 rounded-xl hover:scale-105 transition"
-              onClick={() => {
-  router.push(`/product/${item.slug}`);
-  window.dispatchEvent(
-    new CustomEvent("openProductDetails", { detail: item })
-  );
-  window.dispatchEvent(
-    new CustomEvent("changeBigImage", { detail: item.img })
-  );
-}}
-
-              />
-            ))}
-          </div>
-
-
-
+              <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
+                <div className=" hidden lg:flex lg:gap-5">
+       {slides.length > 1 &&
+    slides.slice(1, 3).map((img, index) => (
+      <Image
+        key={index}
+        src={img}
+        alt="thumb"
+        width={130}
+        height={130}
+        className="bg-white rounded-xl cursor-pointer"
+        onClick={() => {
+          setActiveSlides((prev) => [
+            img,
+            ...prev.filter((i) => i !== img),
+          ]);
+          setCurrentSlide(0);
+        }}
+      />
+    ))}
+                </div>
+                <div className="flex gap-2 pb-10 mb-20 p-3 pl-6 lg:hidden">
+                  {similarProducts.map((item) => (
+                    <Image
+                      key={item.id}
+                      src={item.img}
+                      alt={item.name}
+                      width={150}
+                      height={150}
+                      className="cursor-pointer bg-gray-100 rounded-xl hover:scale-105 transition"
+                      onClick={() => {
+                        router.push(`/product/${item.slug}`);
+                        window.dispatchEvent(
+                          new CustomEvent("openProductDetails", {
+                            detail: item,
+                          }),
+                        );
+                        window.dispatchEvent(
+                          new CustomEvent("changeBigImage", {
+                            detail: item.img,
+                          }),
+                        );
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
-            </div>
-           
+
             <div className="p-8 rounded-xl">
               <div
                 className="
