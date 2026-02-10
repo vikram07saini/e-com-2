@@ -652,9 +652,9 @@ export default function Page() {
 
             <div className="p-8 rounded-xl">
               <div
-                className="
+                className="                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
     lg:hidden
-    fixed
+    fixed 
     bottom-0
     left-0
     right-0

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /api
+Disallow: /dashboard
+
+Sitemap: https://e-com-2-cyan.vercel.app/sitemap.xml
