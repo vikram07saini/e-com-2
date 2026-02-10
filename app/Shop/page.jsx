@@ -36,6 +36,17 @@ export default function Page() {
   const similarProducts = selectedShoe
     ? ShopData.filter((item) => item.id !== selectedShoe.id).slice(0, 2)
     : [];
+  const defaultSlides = ShopData.slice(0, 5).map((item) => item.img);
+
+  const getSlidesForProduct = (product) => {
+    if (!product) return defaultSlides;
+    const base = product.img ? [product.img] : [];
+    const rest = ShopData.filter((item) => item.id !== product.id).map(
+      (item) => item.img,
+    );
+    const unique = [...new Set([...base, ...rest])];
+    return unique.slice(0, 5);
+  };
 
   const openPDP = (product) => {
     router.push(`/product/${product.slug}`, { scroll: false });
@@ -43,13 +54,7 @@ export default function Page() {
 
   const openProduct = (product) => {
     setSelectedShoe(product);
-
-    const reordered = [
-      product.img,
-      ...Slide[0].images.filter((img) => img !== product.img),
-    ];
-
-    setActiveSlides(reordered);
+    setActiveSlides(getSlidesForProduct(product));
     setCurrentSlide(0);
   };
 
@@ -135,13 +140,7 @@ export default function Page() {
       if (!product) return;
 
       setSelectedShoe(product);
-
-      const reordered = [
-        product.img,
-        ...Slide[0].images.filter((img) => img !== product.img),
-      ];
-
-      setActiveSlides(reordered);
+      setActiveSlides(getSlidesForProduct(product));
       setCurrentSlide(0);
     };
 
@@ -170,7 +169,7 @@ export default function Page() {
   useEffect(() => {
     const handleCloseProduct = () => {
       setSelectedShoe(null);
-      setActiveSlides(Slide[0].images);
+      setActiveSlides(defaultSlides);
       setCurrentSlide(0);
     };
 
@@ -210,24 +209,10 @@ export default function Page() {
     setSelectedStory(null);
   }, [pathname]);
 
-  const Slide = [
-    {
-      id: 1,
-      name: "Nike Shoe",
-      images: [
-        "/ShoesGallery/21.png",
-        "/ShoesGallery/16.png",
-        "/ShoesGallery/2.png",
-        "/ShoesGallery/2.png",
-        "/ShoesGallery/13.png",
-      ],
-    },
-  ];
-
   const slides =
     activeSlides.length > 0
       ? activeSlides.filter(Boolean)
-      : Slide[0].images.filter(Boolean);
+      : defaultSlides.filter(Boolean);
 
   const prevSlide = () => {
     setIsFading(true);
@@ -249,13 +234,7 @@ export default function Page() {
     router.push(`/product/${product.slug}`);
     if (window.innerWidth >= 1024) {
       setSelectedShoe(product);
-
-      const reordered = [
-        product.img,
-        ...Slide[0].images.filter((img) => img !== product.img),
-      ];
-
-      setActiveSlides(reordered);
+      setActiveSlides(getSlidesForProduct(product));
       setCurrentSlide(0);
 
       window.dispatchEvent(
@@ -509,7 +488,7 @@ export default function Page() {
                 {slides[currentSlide] && (
                   <Image
                     src={slides[currentSlide]}
-                    alt={Slide[0].name}
+                    alt={selectedShoe?.name || "Product image"}
                     width={600}
                     height={400}
                     className={`object-contain transition-all duration-300
@@ -624,24 +603,24 @@ export default function Page() {
 
               <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
                 <div className=" hidden lg:flex lg:gap-5">
-       {slides.length > 1 &&
-    slides.slice(1, 3).map((img, index) => (
-      <Image
-        key={index}
-        src={img}
-        alt="thumb"
-        width={130}
-        height={130}
-        className="bg-white rounded-xl cursor-pointer"
-        onClick={() => {
-          setActiveSlides((prev) => [
-            img,
-            ...prev.filter((i) => i !== img),
-          ]);
-          setCurrentSlide(0);
-        }}
-      />
-    ))}
+    {slides.slice(2,4  ).map((img, index) => (
+  <Image
+    key={index}
+    src={img}
+    alt="thumb"
+    width={130}
+    height={130}
+    className="bg-white rounded-xl cursor-pointer"
+    onClick={() => {
+      setActiveSlides((prev) => [
+        img,
+        ...prev.filter((i) => i !== img),
+      ]);
+      setCurrentSlide(0);
+    }}
+  />
+))}
+
                 </div>
                 <div className="flex gap-2 pb-10 mb-20 p-3 pl-6 lg:hidden">
                   {similarProducts.map((item) => (
