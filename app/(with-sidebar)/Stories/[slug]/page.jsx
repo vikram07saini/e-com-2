@@ -57,9 +57,12 @@ export async function generateMetadata({ params }) {
 export default async function ProductPage({ params }) {
   const { slug } = params;
 
-  const product = ShopData.find(
-    (item) => item.slug.toLowerCase() === slug.toLowerCase()
-  );
+ const product = ShopData.find(
+  (item) =>
+    item.slug &&
+    item.slug.toLowerCase() === slug.toLowerCase()
+);
+
 
   if (!product) {
     return (
