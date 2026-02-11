@@ -1,96 +1,64 @@
-import { stories } from "@/data/stories";
+import ShopData from "@/data/ShopData";
 import Image from "next/image";
+
+// ✅ Generate unique static params
 export function generateStaticParams() {
-  return stories.map((story) => ({
-    slug: story.slug,
+  const uniqueSlugs = [
+    ...new Set(
+      ShopData.filter((item) => item.slug).map((item) => item.slug)
+    ),
+  ];
+
+  return uniqueSlugs.map((slug) => ({
+    slug,
   }));
 }
-export async function generateMetadata({ params }) {
-  const story = stories.find((s) => s.slug === params.slug);
 
-  if (!story) {
+// ✅ Metadata
+export async function generateMetadata({ params }) {
+  const { slug } = params;
+
+  const product = ShopData.find(
+    (item) => item.slug === slug
+  );
+
+  if (!product) {
     return {
-      title: "Story Not Found",
-      description: "The requested story does not exist.",
+      title: "Product Not Found",
+      description: "The requested product does not exist.",
     };
   }
 
   return {
-    title: story.title,
-    description: story.content.slice(0, 150), 
-    keywords: [
-      story.title,
-      story.category,
-      "fashion news",
-      "shoe trends",
-      "latest releases",
-    ],
-    openGraph: {
-      title: story.title,
-      description: story.content.slice(0, 150),
-      type: "article",
-      url: `/stories/${story.slug}`,
-    },
-    twitter: {
-      card: "summary",
-      title: story.title,
-      description: story.content.slice(0, 150),
-    },
+    title: `${product.name} | Sneaker Store`,
+    description: `Buy ${product.name} online at best price.`,
   };
 }
-export default function StoryDetailPage({ params }) {
-  const story = stories.find((s) => s.slug === params.slug);
 
-  if (!story) {
-    return (
-      <h2 className="text-center mt-10 text-2xl font-bold">
-        Story Not Found
-      </h2>
-    );
+// ✅ Page
+export default function ProductPage({ params }) {
+  const { slug } = params;
+
+  const product = ShopData.find(
+    (item) => item.slug === slug
+  );
+
+  if (!product) {
+    return <div className="p-10">Product not found</div>;
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-10">
-      <div className="text-xs uppercase text-gray-500 mb-2">
-        {story.category} • {story.date}
-      </div>
+    <div className="p-10">
+      <h1 className="text-3xl font-bold mb-6">
+        {product.name}
+      </h1>
 
-      <h1 className="text-4xl font-bold mb-6">{story.title}</h1>
-
-      <div className="flex justify-center bg-gray-100 p-6 rounded-2xl mb-6">
-        <Image
-          src={story.image}
-          alt={story.title}
-          width={600}
-          height={400}
-          className="object-contain rounded-xl"
-          priority
-        />
-      </div>
-
-      <p className="text-xl text-gray-800 leading-relaxed">
-        {story.content}
-      </p>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: story.title,
-            description: story.content.slice(0, 150),
-            image: story.image,
-            datePublished: story.date,
-            author: {
-              "@type": "Organization",
-              name: "Your Store Name",
-            },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": `/stories/${story.slug}`,
-            },
-          }),
-        }}
+      <Image
+        src={product.img}
+        alt={product.name}
+        width={500}
+        height={400}
+        priority
       />
     </div>
   );
