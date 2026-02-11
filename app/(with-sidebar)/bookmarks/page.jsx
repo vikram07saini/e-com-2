@@ -68,11 +68,11 @@ const Page = () => {
               {isBookmarked ? <IoMdBookmark /> : <IoBookmarkOutline />}
             </button>
 
-            <h1 className=" pl-5 text-center md:text-left">09.04.22</h1>
+            <h2 className=" pl-5 text-center md:text-left">09.04.22</h2>
 
-            <h1 className="font-semibold text-lg sm:text-xl text-center md:text-left p-5">
+            <h2 className="font-semibold text-lg sm:text-xl text-center md:text-left p-5">
               The North Face Nuptse Traction Chukka
-            </h1>
+            </h2>
 
             <p className="text-sm pt-5 md:me-10 text-justify p-5">
               Borrowing its nomenclature from The North Face's stalwart

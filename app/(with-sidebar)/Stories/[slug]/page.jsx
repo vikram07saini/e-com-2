@@ -43,9 +43,9 @@ export default function StoryDetailPage({ params }) {
 
   if (!story) {
     return (
-      <h1 className="text-center mt-10 text-2xl font-bold">
+      <h2 className="text-center mt-10 text-2xl font-bold">
         Story Not Found
-      </h1>
+      </h2>
     );
   }
 
