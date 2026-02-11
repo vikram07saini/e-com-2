@@ -31,7 +31,7 @@ export const metadata = {
   metadataBase: new URL("https://e-com-2-cyan.vercel.app/"),
 
   openGraph: {
-    title: "E-Commerce Store |HartCopy Site",
+    title: "E-Commerce Store | HartCopy Site",
     description:
       "Discover premium products with secure checkout and fast delivery.",
     url: "https://e-com-2-cyan.vercel.app/",
