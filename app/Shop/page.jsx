@@ -312,7 +312,7 @@ export default function Page() {
               />
 
               <div className="lg:absolute lg:top-[74%] lg:left-[3%] lg:-translate-y-1/6 lg:p-3 absolute top-[75%] left-[1%] -translate-y-1/4 p-2">
-                <h1 className="text-xs text-white">New Release</h1>
+                <h2 className="text-xs text-white">New Release</h2>
                 <h1 className="lg:text-3xl text-lg text-white">
                   The North Face Nuptse <br />
                   Traction Chukka
@@ -327,7 +327,7 @@ export default function Page() {
 
             <div className="transition-all duration-200 ">
               <div className="flex justify-between pl-2 pr-2 pb-4 lg:hidden">
-                <h1 className="text-sm">spotlight:</h1>
+                <h2 className="text-sm">spotlight:</h2>
                 <h1 className="text-sm">{selectedStory.date}</h1>
               </div>
               <div className="w-full lg:max-w-4xl  px-4 break-words leading-relaxed">
@@ -576,29 +576,29 @@ export default function Page() {
     ml-[-1.09rem]
   "
             >
-              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+              <h3 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
                 The North Face
-              </h1>
+              </h3>
 
-              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+              <h3 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
                 Nov 2025
-              </h1>
+              </h3>
 
-              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+              <h3 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
                 Camouflage
-              </h1>
+              </h3>
 
-              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+              <h3 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
                 High
-              </h1>
+              </h3>
 
-              <h1 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
+              <h3 className="bg-gray-300 text-black text-[0.75rem] px-[0.4rem] py-[0.2rem] rounded-sm shadow-md">
                 Slip On
-              </h1>
+              </h3>
             </div>
             <div className="bg-white rounded-b-2xl">
               <div className="mt-8 pl-8 lg:hidden bg-white ">
-                <h1 className="pt-5">SIMILAR PRODUCTS</h1>
+                <h3 className="pt-5">SIMILAR PRODUCTS</h3>
               </div>
 
               <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
@@ -714,7 +714,7 @@ export default function Page() {
     "
               >
                 <div className="flex gap-6 items-center">
-                  <h1>ZOOM</h1>
+                  <h3>ZOOM</h3>
                   <button className="text-2xl cursor-pointer" onClick={zoomOut}>
                     -
                   </button>
