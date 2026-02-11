@@ -11,7 +11,6 @@ const inter = Inter({
 
 export const metadata = {
   metadataBase: new URL("https://e-com-2-cyan.vercel.app/"),
-
   title: {
     default: "HartCopy Site",
     template: "%s | HartCopy Site",
@@ -26,6 +25,10 @@ export const metadata = {
     "buy products online",
     "fashion store",
   ],
+  icons: {
+    icon:"/logo.svg",
+  },
+  metadataBase: new URL("https://e-com-2-cyan.vercel.app/"),
 
   openGraph: {
     title: "HartCopy Site",
