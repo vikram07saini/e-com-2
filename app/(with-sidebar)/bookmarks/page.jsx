@@ -88,27 +88,6 @@ const Page = () => {
           </div>
 
           <div className="pt-[5px] mt-6 p-3 pb-25">
-            {/* <p className="text-center md:text-left ml-2">SIMILAR PRODUCTS</p> */}
-           {/* <div className="flex flex-wrap justify-center md:justify-start gap-7">
-  {bookmark.slice(0, 2).map((item) => {
-    const product = ShopData.find((p) => p.id === item.id);
-
-    if (!product) return null;
-
-    return (
-      <Image
-        key={product.id}
-        src={product.img}
-        alt={product.name}
-        width={150}
-        height={150}
-        onClick={() => router.push(`/product/${product.slug}`)} // ✅ PDP route
-        className="object-contain w-[120px] sm:w-[140px] md:w-[150px] h-auto cursor-pointer"
-      />
-    );
-  })}
-</div> */}
-
           </div>
         </div>
       </div>

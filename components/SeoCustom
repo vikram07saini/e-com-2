@@ -1,0 +1,52 @@
+import { useEffect } from "react";
+
+const SeoCustom = ({
+  title,
+  description,
+  keywords,
+  canonical,
+}) => {
+  useEffect(() => {
+    // Title
+    if (title) {
+      document.title = title;
+    }
+
+    // Description
+    if (description) {
+      let desc = document.querySelector("meta[name='description']");
+      if (!desc) {
+        desc = document.createElement("meta");
+        desc.name = "description";
+        document.head.appendChild(desc);
+      }
+      desc.setAttribute("content", description);
+    }
+
+    // Keywords
+    if (keywords) {
+      let key = document.querySelector("meta[name='keywords']");
+      if (!key) {
+        key = document.createElement("meta");
+        key.name = "keywords";
+        document.head.appendChild(key);
+      }
+      key.setAttribute("content", keywords);
+    }
+
+    // Canonical
+    if (canonical) {
+      let link = document.querySelector("link[rel='canonical']");
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "canonical";
+        document.head.appendChild(link);
+      }
+      link.setAttribute("href", canonical);
+    }
+  }, [title, description, keywords, canonical]);
+
+  return null;
+};
+
+export default SeoCustom;
