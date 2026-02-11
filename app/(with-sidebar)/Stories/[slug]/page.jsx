@@ -1,18 +1,51 @@
 import { stories } from "@/data/stories";
 import Image from "next/image";
-
 export function generateStaticParams() {
   return stories.map((story) => ({
     slug: story.slug,
   }));
 }
+export async function generateMetadata({ params }) {
+  const story = stories.find((s) => s.slug === params.slug);
 
+  if (!story) {
+    return {
+      title: "Story Not Found",
+      description: "The requested story does not exist.",
+    };
+  }
+
+  return {
+    title: story.title,
+    description: story.content.slice(0, 150), 
+    keywords: [
+      story.title,
+      story.category,
+      "fashion news",
+      "shoe trends",
+      "latest releases",
+    ],
+    openGraph: {
+      title: story.title,
+      description: story.content.slice(0, 150),
+      type: "article",
+      url: `/stories/${story.slug}`,
+    },
+    twitter: {
+      card: "summary",
+      title: story.title,
+      description: story.content.slice(0, 150),
+    },
+  };
+}
 export default function StoryDetailPage({ params }) {
   const story = stories.find((s) => s.slug === params.slug);
 
   if (!story) {
     return (
-      <h1 className="text-center mt-10 text-2xl font-bold">Story Not Found</h1>
+      <h1 className="text-center mt-10 text-2xl font-bold">
+        Story Not Found
+      </h1>
     );
   }
 
@@ -35,7 +68,30 @@ export default function StoryDetailPage({ params }) {
         />
       </div>
 
-      <p className="text-xl text-gray-800 leading-relaxed">{story.content}</p>
+      <p className="text-xl text-gray-800 leading-relaxed">
+        {story.content}
+      </p>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: story.title,
+            description: story.content.slice(0, 150),
+            image: story.image,
+            datePublished: story.date,
+            author: {
+              "@type": "Organization",
+              name: "Your Store Name",
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `/stories/${story.slug}`,
+            },
+          }),
+        }}
+      />
     </div>
   );
 }
