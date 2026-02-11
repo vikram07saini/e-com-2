@@ -1,93 +1,109 @@
-import { stories } from "@/data/stories";
+import ShopData from "@/data/ShopData";
 import Image from "next/image";
 export function generateStaticParams() {
-  return stories.map((story) => ({
-    slug: story.slug,
+  const uniqueSlugs = [
+    ...new Set(ShopData.map((item) => item.slug)),
+  ];
+
+  return uniqueSlugs.map((slug) => ({
+    slug,
   }));
 }
 export async function generateMetadata({ params }) {
-  const story = stories.find((s) => s.slug === params.slug);
+  const { slug } = params;
 
-  if (!story) {
+  const product = ShopData.find(
+    (item) => item.slug.toLowerCase() === slug.toLowerCase()
+  );
+
+  if (!product) {
     return {
-      title: "Story Not Found",
-      description: "The requested story does not exist.",
+      title: "Product Not Found | Sneaker Store",
+      description: "The requested product does not exist.",
     };
   }
 
   return {
-    title: story.title,
-    description: story.content.slice(0, 150), 
+    title: `${product.name} | Sneaker Store`,
+    description: `Buy ${product.name} online at best price. Fast delivery and secure checkout available.`,
     keywords: [
-      story.title,
-      story.category,
-      "fashion news",
-      "shoe trends",
-      "latest releases",
+      product.name,
+      "buy shoes online",
+      "premium sneakers",
+      "fashion footwear",
+      "online shopping",
     ],
     openGraph: {
-      title: story.title,
-      description: story.content.slice(0, 150),
-      type: "article",
-      url: `/stories/${story.slug}`,
+      title: product.name,
+      description: `Shop ${product.name} at best price.`,
+      url: `https://e-com-2-cyan.vercel.app/product/${product.slug}`,
+      type: "website",
+      images: [
+        {
+          url: product.img.src || product.img,
+          width: 800,
+          height: 600,
+          alt: product.name,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
-      title: story.title,
-      description: story.content.slice(0, 150),
+      card: "summary_large_image",
+      title: product.name,
+      description: `Buy ${product.name} online at best price.`,
     },
   };
 }
-export default function StoryDetailPage({ params }) {
-  const story = stories.find((s) => s.slug === params.slug);
+export default async function ProductPage({ params }) {
+  const { slug } = params;
 
-  if (!story) {
+  const product = ShopData.find(
+    (item) => item.slug.toLowerCase() === slug.toLowerCase()
+  );
+
+  if (!product) {
     return (
-      <h2 className="text-center mt-10 text-2xl font-bold">
-        Story Not Found
-      </h2>
+      <div className="p-10 text-center">
+        <h1 className="text-2xl font-bold">Product Not Found</h1>
+        <p className="text-gray-600 mt-2">
+          The product you are looking for does not exist.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-10">
-      <div className="text-xs uppercase text-gray-500 mb-2">
-        {story.category} • {story.date}
-      </div>
-
-      <h1 className="text-4xl font-bold mb-6">{story.title}</h1>
-
-      <div className="flex justify-center bg-gray-100 p-6 rounded-2xl mb-6">
-        <Image
-          src={story.image}
-          alt={story.title}
-          width={600}
-          height={400}
-          className="object-contain rounded-xl"
-          priority
-        />
-      </div>
-
-      <p className="text-xl text-gray-800 leading-relaxed">
-        {story.content}
-      </p>
+    <div className="p-10">
+      <h1 className="text-3xl font-bold mb-6">
+        {product.name}
+      </h1>
+      <Image
+        src={product.img}
+        alt={product.name}
+        width={500}
+        height={400}
+        priority
+        className="rounded-lg"
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: story.title,
-            description: story.content.slice(0, 150),
-            image: story.image,
-            datePublished: story.date,
-            author: {
-              "@type": "Organization",
-              name: "Your Store Name",
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            name: product.name,
+            image: product.img.src || product.img,
+            description: `Buy ${product.name} at best price.`,
+            brand: {
+              "@type": "Brand",
+              name: product.name.split(" ")[0],
             },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": `/stories/${story.slug}`,
+            offers: {
+              "@type": "Offer",
+              priceCurrency: "INR",
+              price: "9999",
+              availability: "https://schema.org/InStock",
+              url: `https://e-com-2-cyan.vercel.app/product/${product.slug}`,
             },
           }),
         }}

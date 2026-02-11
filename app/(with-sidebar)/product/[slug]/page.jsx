@@ -1,14 +1,11 @@
 import ShopData from "@/data/ShopData";
 import Image from "next/image";
 
-// ✅ Generate Static Paths
 export function generateStaticParams() {
   return ShopData.map((item) => ({
     slug: item.slug,
   }));
 }
-
-// ✅ Dynamic Metadata
 export async function generateMetadata({ params }) {
   const { slug } = params;
 
@@ -54,8 +51,6 @@ export async function generateMetadata({ params }) {
     },
   };
 }
-
-// ✅ Product Page
 export default async function ProductPage({ params }) {
   const { slug } = params;
 
@@ -76,12 +71,9 @@ export default async function ProductPage({ params }) {
 
   return (
     <div className="p-10">
-      {/* ✅ SEO H1 */}
       <h1 className="text-3xl font-bold mb-6">
         {product.name}
       </h1>
-
-      {/* ✅ Product Image */}
       <Image
         src={product.img}
         alt={product.name}
@@ -90,8 +82,6 @@ export default async function ProductPage({ params }) {
         priority
         className="rounded-lg"
       />
-
-      {/* ✅ JSON-LD Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
