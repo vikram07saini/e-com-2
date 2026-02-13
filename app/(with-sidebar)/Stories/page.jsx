@@ -2,14 +2,40 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { stories } from "@/data/stories";
 import { useState, useRef, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/lib/firebase";
 
 export default function StoriesPage() {
+  const [stories, setStories] = useState([]);
   const [activeStory, setActiveStory] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const storyRef = useRef(null);
+  
+  useEffect(() => {
+    const fetchStories = async () => {
+      const snapshot = await getDocs(collection(db, "stories"));
+
+      const data = snapshot.docs.map((doc, index) => {
+        const d = doc.data();
+        return {
+          id: index + 1,
+          slug: d.slug,
+          image: d.image,
+          category: d.category,
+          date: d.date,
+          title: d.title,
+          content: d.content,
+        };
+      });
+
+      setStories(data);
+    };
+
+    fetchStories();
+  }, []);
+
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -42,8 +68,8 @@ export default function StoriesPage() {
                 <div className="flex flex-col rounded-xl sm:flex-row mt-0 sm:mt-2 p-2 sm:p-0 bg-[#F5F5F5] hover:bg-[#EDEDED] transition">
                   <div className="w-full sm:w-[220px] mb-4 sm:mb-0">
                     <Image
-                      src={story.image}
-                      alt={story.title}
+                    src={story.image || "/storiesImages/story1.png"}
+  alt={story.title || "Story image"}
                       width={140}
                       height={140}
                       className="object-cover w-full sm:w-[140px] sm:h-[140px] rounded-l-xl"
@@ -72,7 +98,8 @@ export default function StoriesPage() {
                   <div className="w-[230px] h-[150px] lg:flex-shrink-0">
                     <Image
                       src={story.image}
-                      alt={story.title}
+                     alt={story?.title ?? "Story image"}
+
                       width={120}
                       height={120}
                       className="object-cover w-full h-full rounded-md"

@@ -1,59 +1,29 @@
-import { stories } from "@/data/stories";
+"use client";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/lib/firebase";
 import Image from "next/image";
 
-export function generateStaticParams() {
-  return stories.map((story) => ({
-    slug: story.slug,
-  }));
-}
+export default function StoryDetailPage({ params }) {
+  const [story, setStory] = useState(null);
+  const slug = params?.slug;
 
-export async function generateMetadata({ params }) {
-  const { slug } = await params;   // ✅ FIXED
+  useEffect(() => {
+    const fetchStory = async () => {
+      const snapshot = await getDocs(collection(db, "stories"));
 
-  const story = stories.find((s) => s.slug === slug);
+      const stories = snapshot.docs.map((doc) => doc.data());
 
-  if (!story) {
-    return {
-      title: "Story Not Found",
-      description: "The requested story does not exist.",
+      const found = stories.find((s) => s.slug === slug);
+
+      setStory(found || null);
     };
-  }
 
-  return {
-    title: story.title,
-    description: story.content.slice(0, 150),
-    keywords: [
-      story.title,
-      story.category,
-      "fashion news",
-      "shoe trends",
-      "latest releases",
-    ],
-    openGraph: {
-      title: story.title,
-      description: story.content.slice(0, 150),
-      type: "article",
-      url: `/stories/${story.slug}`,
-    },
-    twitter: {
-      card: "summary",
-      title: story.title,
-      description: story.content.slice(0, 150),
-    },
-  };
-}
-
-export default async function StoryDetailPage({ params }) {
-  const { slug } = await params;   // ✅ FIXED
-
-  const story = stories.find((s) => s.slug === slug);
+    fetchStory();
+  }, [slug]);
 
   if (!story) {
-    return (
-      <h2 className="text-center mt-10 text-2xl font-bold">
-        Story Not Found
-      </h2>
-    );
+    return <h2 className="text-center mt-10 text-2xl font-bold">Loading...</h2>;
   }
 
   return (
@@ -67,39 +37,14 @@ export default async function StoryDetailPage({ params }) {
       <div className="flex justify-center bg-gray-100 p-6 rounded-2xl mb-6">
         <Image
           src={story.image}
-          alt={story.title}
+          alt={story.title || "Story image"}
           width={600}
           height={400}
           className="object-contain rounded-xl"
-          priority
         />
       </div>
 
-      <p className="text-xl text-gray-800 leading-relaxed">
-        {story.content}
-      </p>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: story.title,
-            description: story.content.slice(0, 150),
-            image: story.image,
-            datePublished: story.date,
-            author: {
-              "@type": "Organization",
-              name: "Your Store Name",
-            },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": `/stories/${story.slug}`,
-            },
-          }),
-        }}
-      />
+      <p className="text-xl text-gray-800 leading-relaxed">{story.content}</p>
     </div>
   );
 }

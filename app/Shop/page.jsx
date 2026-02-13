@@ -1,22 +1,22 @@
 "use client";
+import { db } from "@/app/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import ShopData from "@/data/ShopData";
-import { stories } from "@/data/stories.js";
-import Link from "next/link";
-import story4 from "@/public/storiesImages/story4.png";
 import { FaRegBookmark } from "react-icons/fa6";
 import { HiOutlineArrowSmRight, HiOutlineArrowSmLeft } from "react-icons/hi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import logo from "@/public/logo.svg";
 import { useRouter, usePathname } from "next/navigation";
 import ProductDetailsSidebar from "@/components/ProductDetailsSidebar";
 
 export default function Page() {
   const [isFinding, setIsFinding] = useState(false);
+  const [firebaseStories, setFirebaseStories] = useState([]);
   const [selectedShoe, setSelectedShoe] = useState(null);
   const [selectedStory, setSelectedStory] = useState(null);
+  const [firebaseProducts, setFirebaseProducts] = useState([]);
   const pathname = usePathname();
+  const isStoriesPage = pathname.startsWith("/Stories");
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const storyContentRef = useRef(null);
@@ -27,24 +27,32 @@ export default function Page() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedProductId, setSelectedProductId] = useState(null);
   const hideOnHome = pathname === "/home";
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStart = useRef({ x: 0, y: 0 });
   const [gridCols, setGridCols] = useState(2);
   const tagRef = useRef(null);
-  const [showDiv, setShowDiv] = useState(false);
-  const similarProducts = selectedShoe
-    ? ShopData.filter((item) => item.id !== selectedShoe.id).slice(0, 2)
-    : [];
-  const defaultSlides = ShopData.slice(0, 5).map((item) => item.img);
+  const productsList = firebaseProducts;
+  const similarProducts =
+    selectedShoe && firebaseProducts?.length > 0
+      ? firebaseProducts
+          .filter((item) => item.id !== selectedShoe.id)
+          .slice(0, 2)
+      : [];
+
+  const defaultSlides =
+    firebaseProducts?.length > 0
+      ? firebaseProducts.slice(0, 5).map((item) => item.img)
+      : [];
 
   const getSlidesForProduct = (product) => {
-    if (!product) return defaultSlides;
+    if (!product || firebaseProducts.length === 0) return defaultSlides;
+
     const base = product.img ? [product.img] : [];
-    const rest = ShopData.filter((item) => item.id !== product.id).map(
-      (item) => item.img,
-    );
+
+    const rest = firebaseProducts
+      .filter((item) => item.id !== product.id)
+      .map((item) => item.img);
+
     const unique = [...new Set([...base, ...rest])];
+
     return unique.slice(0, 5);
   };
 
@@ -72,6 +80,63 @@ export default function Page() {
 
     return () => window.removeEventListener("resize", updateGridByScreen);
   }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "products"));
+
+        const data = snapshot.docs.map((doc, index) => {
+          const d = doc.data();
+
+          return {
+            id: index + 1,
+            name: d.name,
+            slug: d.slug,
+            price: d.price,
+            img: d.image, 
+            sale: d.sale || null,
+          };
+        });
+
+        setFirebaseProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+  useEffect(() => {
+    const fetchStories = async () => {
+      const snapshot = await getDocs(collection(db, "stories"));
+
+      const data = snapshot.docs.map((doc, index) => ({
+        id: index + 1,
+        ...doc.data(),
+      }));
+      setFirebaseStories(data);
+    };
+
+    fetchStories();
+  }, []);
+  useEffect(() => {
+    if (!pathname.startsWith("/Stories")) return;
+    if (firebaseStories.length === 0) return;
+
+    const slug = pathname.split("/")[2];
+
+
+    if (!slug) {
+      setSelectedStory(firebaseStories[0]);
+      return;
+    }
+
+ 
+    const story = firebaseStories.find((s) => s.slug === slug);
+    setSelectedStory(story || null);
+  }, [pathname, firebaseStories]);
+
   useEffect(() => {
     if (!selectedShoe) return;
 
@@ -99,9 +164,12 @@ export default function Page() {
     }
   }, [selectedShoe?.id]);
 
-  const sortedShopData = [...ShopData].sort((a, b) =>
-    sortOrder === "asc" ? a.id - b.id : b.id - a.id,
-  );
+  const sortedShopData =
+    firebaseProducts?.length > 0
+      ? [...firebaseProducts].sort((a, b) =>
+          sortOrder === "asc" ? a.id - b.id : b.id - a.id,
+        )
+      : [];
 
   const zoomIn = () => {
     setGridCols((prev) => {
@@ -127,12 +195,13 @@ export default function Page() {
     if (!pathname.startsWith("/product/")) return;
 
     const slug = pathname.split("/")[2];
-    const product = ShopData.find((p) => p.slug === slug);
+
+    const product = firebaseProducts.find((p) => p.slug === slug);
 
     if (product) {
       openProduct(product);
     }
-  }, [pathname]);
+  }, [pathname, firebaseProducts]);
 
   useEffect(() => {
     const handleProductSelected = (e) => {
@@ -179,35 +248,26 @@ export default function Page() {
       window.removeEventListener("closeProductDetails", handleCloseProduct);
     };
   }, []);
-
-  const isStoriesPage = pathname.startsWith("/Stories");
   useEffect(() => {
-    if (pathname.startsWith("/product/")) {
-      return;
-    }
-
-    const lowerPath = pathname.toLowerCase();
-    const isMobile = window.innerWidth < 1024;
-
-    if (lowerPath === "/stories" && isMobile) {
+    if (!pathname.toLowerCase().startsWith("/stories")) {
       setSelectedStory(null);
       return;
     }
 
-    if (lowerPath === "/stories" && !isMobile) {
-      setSelectedStory(stories[0] || null);
+    if (firebaseStories.length === 0) return;
+
+    const slug = pathname.split("/")[2];
+
+    // If URL is exactly /Stories
+    if (!slug) {
+      setSelectedStory(firebaseStories[0]);
       return;
     }
 
-    if (lowerPath.startsWith("/stories/")) {
-      const slug = pathname.split("/")[2];
-      const story = stories.find((s) => s.slug === slug);
-      setSelectedStory(story || null);
-      return;
-    }
-
-    setSelectedStory(null);
-  }, [pathname]);
+    // If URL is /Stories/some-slug
+    const story = firebaseStories.find((s) => s.slug === slug);
+    setSelectedStory(story || firebaseStories[0]);
+  }, [pathname, firebaseStories]);
 
   const slides =
     activeSlides.length > 0
@@ -232,15 +292,6 @@ export default function Page() {
 
   const handleProductClick = (product) => {
     router.push(`/product/${product.slug}`);
-    if (window.innerWidth >= 1024) {
-      setSelectedShoe(product);
-      setActiveSlides(getSlidesForProduct(product));
-      setCurrentSlide(0);
-
-      window.dispatchEvent(
-        new CustomEvent("productSelected", { detail: product }),
-      );
-    }
   };
 
   const showDesktopZoomBar = !isMobile && !selectedStory && !selectedShoe;
@@ -300,12 +351,8 @@ export default function Page() {
           >
             <div className="relative flex justify-center bg-white rounded-2xl mb-6">
               <Image
-                src={
-                  selectedStory.slug === stories[0].slug
-                    ? story4
-                    : selectedStory.image
-                }
-                alt={selectedStory.title}
+                src={selectedStory?.image}
+                alt={selectedStory?.title || "Story image"}
                 width={1200}
                 height={600}
                 className="w-full h-120 object-cover rounded-xl mt-11"
@@ -515,17 +562,16 @@ export default function Page() {
                       alt="related"
                       width={130}
                       height={130}
-                    onClick={() => {
-  const clickedImg = img;
+                      onClick={() => {
+                        const clickedImg = img;
 
-  setActiveSlides((prev) => [
-    clickedImg,
-    ...prev.filter((i) => i !== clickedImg),
-  ]);
+                        setActiveSlides((prev) => [
+                          clickedImg,
+                          ...prev.filter((i) => i !== clickedImg),
+                        ]);
 
-  setCurrentSlide(0);
-}}
-
+                        setCurrentSlide(0);
+                      }}
                       className={`
         bg-white rounded-xl cursor-pointer
         ${currentSlide === index ? "ring-2 ring-blue-500" : ""}
@@ -603,24 +649,23 @@ export default function Page() {
 
               <div className="flex gap-5 md:pb-20 lg:pb-3 items-center  justify-center  w-50 pl-2 pt-1 mt-2 lg:fixed lg:bottom-1 lg:left-100 ">
                 <div className=" hidden lg:flex lg:gap-5">
-    {slides.slice(1, 3).map((img, index) => (
-  <Image
-    key={index}
-    src={img}
-    alt="thumb"
-    width={130}
-    height={130}
-    className="bg-white rounded-xl cursor-pointer"
-    onClick={() => {
-      setActiveSlides((prev) => [
-        img,
-        ...prev.filter((i) => i !== img),
-      ]);
-      setCurrentSlide(0);
-    }}
-  />
-))}
-
+                  {slides.slice(1, 3).map((img, index) => (
+                    <Image
+                      key={index}
+                      src={img}
+                      alt="thumb"
+                      width={130}
+                      height={130}
+                      className="bg-white rounded-xl cursor-pointer"
+                      onClick={() => {
+                        setActiveSlides((prev) => [
+                          img,
+                          ...prev.filter((i) => i !== img),
+                        ]);
+                        setCurrentSlide(0);
+                      }}
+                    />
+                  ))}
                 </div>
                 <div className="flex gap-2 pb-10 mb-20 p-3 pl-6 lg:hidden">
                   {similarProducts.map((item) => (
@@ -798,7 +843,10 @@ export default function Page() {
                   />
                 </div>
               )}
-              <ProductDetailsSidebar product={selectedShoe} />
+              <ProductDetailsSidebar
+                product={selectedShoe}
+                products={firebaseProducts}
+              />
             </div>
           </>
         )}

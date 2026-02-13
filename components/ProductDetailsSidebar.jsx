@@ -3,23 +3,26 @@ import { useState } from "react";
 import { IoMdBookmark } from "react-icons/io";
 import { IoBookmarkOutline } from "react-icons/io5";
 import Image from "next/image";
-import ShopData from "@/data/ShopData";
+
 import { useRouter } from "next/navigation";
 
 
-export default function ProductDetailsSidebar({ product }) {
+export default function ProductDetailsSidebar({ product, products }) {
     const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  if (!product) return null;
+if (!product) return null;
 
+const currentIndex =
+  products?.findIndex((p) => p.id === product.id) ?? -1;
 
-const currentIndex = ShopData.findIndex(p => p.id === product.id);
-
-const similarProducts = [
-  ShopData[(currentIndex + 1) % ShopData.length],
-  ShopData[(currentIndex + 2) % ShopData.length],
-];
+const similarProducts =
+  products && products.length > 0 && currentIndex !== -1
+    ? [
+        products[(currentIndex + 1) % products.length],
+        products[(currentIndex + 2) % products.length],
+      ].filter(Boolean)
+    : [];
 
 
   return (
