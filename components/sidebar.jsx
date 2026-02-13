@@ -1,6 +1,4 @@
 "use client";
-import ShopData from "@/data/ShopData"; // ✅ ADD THIS
-
 import { useEffect, useState } from "react";
 import ProductDetailsSidebar from "@/components/ProductDetailsSidebar";
 import Link from "next/link";
@@ -56,7 +54,9 @@ const ArrowLeftIcon = () => (
 );
 
 export default function Sidebar({ children }) {
-  const [selectedProduct, setSelectedProduct] = useState(null);
+const [products, setProducts] = useState([]);
+const [selectedProduct, setSelectedProduct] = useState(null);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileFull, setMobileFull] = useState(false);
   const pathname = usePathname();
@@ -72,30 +72,72 @@ export default function Sidebar({ children }) {
     if (window.innerWidth < 1024) setMobileFull(false);
   };
 
-  useEffect(() => {
-    const handleProductSelected = (e) => {
-      const product = e.detail;
-      if (!product) return;
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const { collection, getDocs } = await import("firebase/firestore");
+      const { db } = await import("@/app/lib/firebase");
 
-      setSelectedProduct(product);
-    };
+      const snapshot = await getDocs(collection(db, "products"));
 
-    const closeHandler = () => setSelectedProduct(null);
+      const productsData = snapshot.docs.map((doc, index) => {
+        const d = doc.data();
+        return {
+          id: index + 1,
+          name: d.name,
+          slug: d.slug,
+          price: d.price,
+          img: d.image,
+          sale: d.sale || null,
+        };
+      });
 
-    window.addEventListener("productSelected", handleProductSelected);
-    window.addEventListener("closeProductDetails", closeHandler);
-
-    return () => {
-      window.removeEventListener("productSelected", handleProductSelected);
-      window.removeEventListener("closeProductDetails", closeHandler);
-    };
-  }, []);
-  useEffect(() => {
-    if (pathname.startsWith("/product/")) {
-      setMobileFull(false);
-      setIsMobileMenuOpen(false);
+      setProducts(productsData);
+    } catch (err) {
+      console.error(err);
     }
-  }, [pathname]);
+  };
+
+  fetchProducts();
+}, []);
+   useEffect(() => {
+  if (!pathname.startsWith("/product/")) {
+    setSelectedProduct(null);
+    return;
+  }
+
+  const slug = pathname.split("/")[2];
+
+  const fetchAndSetProduct = async () => {
+    const { collection, getDocs } = await import("firebase/firestore");
+    const { db } = await import("@/app/lib/firebase");
+
+    const snapshot = await getDocs(collection(db, "products"));
+
+    const productsData = snapshot.docs.map((doc, index) => {
+      const d = doc.data();
+      return {
+        id: index + 1,
+        name: d.name,
+        slug: d.slug,
+        price: d.price,
+        img: d.image,
+        sale: d.sale || null,
+      };
+    });
+
+    const product = productsData.find((item) => item.slug === slug);
+
+    if (product) {
+      setSelectedProduct(product);
+      setProducts(productsData);
+    }
+  };
+
+  fetchAndSetProduct();
+}, [pathname]);
+
+
 
   const handleNavClick = (path) => {
     setSelectedProduct(null);
@@ -231,10 +273,12 @@ export default function Sidebar({ children }) {
 
             <div className="relative flex-1 overflow-y-auto text-sm">
               {selectedProduct ? (
-                <ProductDetailsSidebar
-                  product={selectedProduct}
-                  onClose={() => setSelectedProduct(null)}
-                />
+  <ProductDetailsSidebar
+  product={selectedProduct}
+  products={products}
+/>
+
+
               ) : (
                 <>
                   {isHome && <Index />}
